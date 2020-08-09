@@ -61,7 +61,13 @@
     <script src="<?php echo e(asset('assets/js/custom.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/app.js')); ?>"></script>
     <!-- end::custom scripts -->
+    <script>
 
+           $(".datepicker").datepicker({
+            changeMonth: true,
+            changeYear: true
+            });
+    </script>
 
 </body>
 

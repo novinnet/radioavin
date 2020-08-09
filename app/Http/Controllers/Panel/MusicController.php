@@ -6,6 +6,7 @@ use Goutte;
 use App\Tag;
 use App\Post;
 use App\Actor;
+use App\Album;
 use App\Artist;
 use App\Image;
 use App\Writer;
@@ -39,9 +40,10 @@ class MusicController extends Controller
     public function Add()
     {
         $playlists = PlayList::all();
+        $albums = Album::all();
         $singers = Artist::whereRole('singer')->get();
         $writers = Artist::whereRole('writer')->get();
-        return view('Panel.Music.add', compact(['playlists', 'singers', 'writers']));
+        return view('Panel.Music.add', compact(['playlists', 'singers', 'writers','albums']));
     }
 
 

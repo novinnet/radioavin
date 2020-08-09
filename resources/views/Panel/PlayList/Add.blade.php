@@ -21,9 +21,8 @@
                             <div class="form-group col-md-6">
                                 <label for=""><span class="text-danger">*</span> Name : </label>
                                 <input required type="text" class="form-control" name="name" id="name"
-                                    value="{{$playlist->fullname ?? ''}}" placeholder="" required>
+                                    value="{{$playlist->namae ?? ''}}" placeholder="" required>
                             </div>
-
                         </div>
                         <div class="row mt-3">
                             <div class="form-group col-md-5">
@@ -37,9 +36,8 @@
                                                 @else
                                                  {{asset('assets/images/640x360.png')}} 
                                             @endisset">
-                                        <input type="file" name="poster" id="poster" @if (!isset($playlist))
-                                            required
-                                        @endif/>
+                                        <input type="file" name="poster" id="poster" @if (!isset($playlist)) required
+                                            @endif />
                                     </div>
                                 </div>
                             </div>
@@ -48,17 +46,17 @@
                             <div class="form-group col-md-12">
                                 <label for="desc">Information: </label>
                                 <textarea class="form-control" name="bio" id="bio" cols="30"
-                                    rows="8">{{$playlist->bio ?? ''}}</textarea>
+                                    rows="8">{{$playlist->information ?? ''}}</textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for=""><span class="text-danger">*</span> Add Songs: </label>
-                                <select name="songs[]" class="js-example-basic-single" multiple dir="rtl" >
+                                <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
                                     @foreach ($songs as $song)
                                     <option value="{{$song->id}}"
-                                        {{isset($post) && $post->songs()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
-                                        {{$song->name}}</option>
+                                        {{isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
+                                        {{$song->title}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,9 +69,9 @@
                             @isset($playlist)
                             Edit PlayList
                             @else
-                        Add PlayList
+                            Add PlayList
                             @endisset
-                             </button>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -86,23 +84,6 @@
 @endsection
 @section('js')
 <script src="{{asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{asset('assets/vendors/ckeditor/ckeditor.js')}}"></script>
-<script>
-    $('#imdb-released').hide()
-    $('#checkImdb').change(function(){
-        if($(this).is(':checked')){
-            $('.add-code').css('display','flex')
-          
-        }else{
-             $('.add-code').hide()
-           
-        }
-    })
 
-    $(".datepicker").datepicker({
-            changeMonth: true,
-            changeYear: true
-            });
-</script>
 
 @endsection

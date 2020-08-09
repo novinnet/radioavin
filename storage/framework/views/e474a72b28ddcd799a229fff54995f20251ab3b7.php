@@ -84,24 +84,6 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('js'); ?>
 <script src="<?php echo e(asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')); ?>"></script>
-<script src="<?php echo e(asset('assets/vendors/ckeditor/ckeditor.js')); ?>"></script>
-<script>
-    $('#imdb-released').hide()
-    $('#checkImdb').change(function(){
-        if($(this).is(':checked')){
-            $('.add-code').css('display','flex')
-          
-        }else{
-             $('.add-code').hide()
-           
-        }
-    })
-
-    $(".datepicker").datepicker({
-            changeMonth: true,
-            changeYear: true
-            });
-</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('Layout.Panel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\radio\resources\views/Panel/Artist/Add.blade.php ENDPATH**/ ?>

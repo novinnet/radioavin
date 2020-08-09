@@ -30,26 +30,16 @@
     </div>
     
     <h6 class="">Album: </h6>
-    <div class="album row">
+    <div class="album row mb-3">
         <div class="col-md-12">
-            <div class="d-flex">
-                <input type="text" class="form-control mb-2" name="" id="album" placeholder="name">
-            </div>
-            <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addAlbum(event)">add</a>
-            <div class="album-wrapper  card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
-                <?php $__currentLoopData = \App\Album::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="custom-control custom-checkbox custom-control-inline ">
-                    <a href="#" class="delete-tag"
-                        onclick="deleteAlbum(event,'<?php echo e($item->id); ?>','<?php echo e(route('DeleteAlbum')); ?>')"><i
-                            class="fa fa-times"></i>
-                    </a>
-                    <input type="checkbox" id="album-<?php echo e($key+1); ?>" name="albums[]" value="<?php echo e($item->name); ?>"
-                        class="custom-control-input album" <?php if(isset($post)): ?>
-                        <?php echo e($post->albums->pluck('id')->contains($item->id) ? 'checked' : ''); ?> <?php endif; ?>>
-                    <label class="custom-control-label" for="album-<?php echo e($key+1); ?>"><?php echo e($item->name); ?></label>
-                </div>
+          
+            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl" >
+                <?php $__currentLoopData = $albums; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $album): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($album->id); ?>"
+                    <?php echo e(isset($post) && $post->albums->pluck('id')->contains($album->id) ? 'selected' : ''); ?>>
+                    <?php echo e($album->name); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
+            </select>
         </div>
     </div>
 

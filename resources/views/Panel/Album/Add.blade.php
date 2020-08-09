@@ -1,66 +1,64 @@
 @extends('Layout.Panel')
 
 @section('content')
-@if (!isset($artist))
-    @include('Includes.Panel.artistmenu')
+@if (!isset($album))
+@include('Includes.Panel.albummenu')
 @endif
 
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <h5 class="text-center">Add Artist </h5>
+                <h5 class="text-center">Add Album </h5>
                 <hr />
             </div>
-            <form id="add-blog" method="post" @isset($artist) action="{{route('Panel.EditArtist',$artist)}}" @else
-                action="{{route('Panel.AddArtist')}}" @endisset enctype="multipart/form-data">
+            <form id="add-blog" method="post" @isset($album) action="{{route('Panel.EditAlbum',$album)}}" @else
+                action="{{route('Panel.AddAlbum')}}" @endisset enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for=""> Full Name : </label>
+                                <label for=""><span class="text-danger">*</span> Name : </label>
                                 <input required type="text" class="form-control" name="name" id="name"
-                                    value="{{$artist->fullname ?? ''}}" placeholder="">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for=""> Role : </label>
-                                <select name="role" id="role" class="form-control custom-control">
-                                    <option value="Singer">Singer</option>
-                                    <option value="Writer">Writer</option>
-                                </select>
+                                    value="{{$album->name ?? ''}}" placeholder="" required>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="form-group col-md-5">
                                 <div class="form-row">
                                     <div class="col-md-3">
-                                        <label for=""> Photo: </label>
+                                        <label for=""><span class="text-danger">*</span> Poster: </label>
                                     </div>
                                     <div class="col-md-9">
-                                        <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($artist)
-                                             {{asset($artist->photo)}} 
+                                        <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($album)
+                                             {{asset($album->photo)}} 
                                                 @else
                                                  {{asset('assets/images/640x360.png')}} 
                                             @endisset">
-                                        <input type="file" name="poster" id="poster" />
+                                        <input type="file" name="poster" id="poster" @if (!isset($album)) required
+                                            @endif />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label for="desc">Biography: </label>
+                                <label for="desc">Information: </label>
                                 <textarea class="form-control" name="bio" id="bio" cols="30"
-                                    rows="8">{{$artist->bio ?? ''}}</textarea>
+                                    rows="8">{{$album->information ?? ''}}</textarea>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="">BirthDay: </label>
-                                <input type="text" class="form-control  datepicker" name="birthday" id="birthday"
-                                    @isset($artist) value="{{\Carbon\Carbon::parse($artist->birthday)->format('d F Y')}}"
-                                    @endisset>
+                            <div class="form-group col-md-12">
+                                <label for=""><span class="text-danger">*</span> Add Songs: </label>
+                                <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
+                                    @foreach ($songs as $song)
+                                    <option value="{{$song->id}}"
+                                        {{isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
+                                        {{$song->title}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -68,12 +66,12 @@
                 <div class="row mt-3">
                     <div class="col-md-12 text-center">
                         <button type="submit" class="btn btn-primary">
-                            @isset($artist)
-                            ویرایش
+                            @isset($album)
+                            Edit Album
                             @else
-                            ثبت
+                            Add Album
                             @endisset
-                            اطلاعات </button>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -86,5 +84,6 @@
 @endsection
 @section('js')
 <script src="{{asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')}}"></script>
+
 
 @endsection

@@ -18,6 +18,8 @@
             </li>
             <li><a href="<?php echo e(route('Panel.PlayList')); ?>"><i class="fas fa-headphones"></i> <span class="pr-4">Play Lists</span> </a>
             </li>
+            <li><a href="<?php echo e(route('Panel.Album')); ?>"><i class="fas fa-headphones"></i> <span class="pr-4">Albums</span> </a>
+            </li>
            
            <!-- <li><a href="#"><i class="fas fa-envelope"></i> <span class="pr-4">ارتباط با کاربران</span> </a>
                 <ul>

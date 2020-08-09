@@ -30,26 +30,16 @@
     </div>
     {{-- end categorys --}}
     <h6 class="">Album: </h6>
-    <div class="album row">
+    <div class="album row mb-3">
         <div class="col-md-12">
-            <div class="d-flex">
-                <input type="text" class="form-control mb-2" name="" id="album" placeholder="name">
-            </div>
-            <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addAlbum(event)">add</a>
-            <div class="album-wrapper  card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
-                @foreach (\App\Album::all() as $key=>$item)
-                <div class="custom-control custom-checkbox custom-control-inline ">
-                    <a href="#" class="delete-tag"
-                        onclick="deleteAlbum(event,'{{$item->id}}','{{route('DeleteAlbum')}}')"><i
-                            class="fa fa-times"></i>
-                    </a>
-                    <input type="checkbox" id="album-{{$key+1}}" name="albums[]" value="{{$item->name}}"
-                        class="custom-control-input album" @if (isset($post))
-                        {{$post->albums->pluck('id')->contains($item->id) ? 'checked' : ''}} @endif>
-                    <label class="custom-control-label" for="album-{{$key+1}}">{{$item->name}}</label>
-                </div>
+          
+            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl" >
+                @foreach ($albums as $album)
+                <option value="{{$album->id}}"
+                    {{isset($post) && $post->albums->pluck('id')->contains($album->id) ? 'selected' : ''}}>
+                    {{$album->name}}</option>
                 @endforeach
-            </div>
+            </select>
         </div>
     </div>
 
