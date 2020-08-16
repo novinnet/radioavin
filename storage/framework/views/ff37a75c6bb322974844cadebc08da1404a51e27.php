@@ -64,7 +64,7 @@
                     onclick="deleteCategory(event,'<?php echo e($item->id); ?>','<?php echo e(route('DeleteCategory')); ?>')"><i
                         class="fa fa-times"></i>
                 </a>
-                <input type="checkbox" id="category-<?php echo e($key+1); ?>" name="categorys[]" value="<?php echo e($item->name); ?>"
+                <input type="checkbox" id="category-<?php echo e($key+1); ?>" name="categories[]" value="<?php echo e($item->name); ?>"
                     class="custom-control-input scategory" <?php if(isset($post)): ?>
                     <?php echo e($post->categories->pluck('id')->contains($item->id) ? 'checked' : ''); ?> <?php endif; ?>>
                 <label class="custom-control-label" for="category-<?php echo e($key+1); ?>"><?php echo e($item->name); ?></label>

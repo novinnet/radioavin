@@ -84,7 +84,7 @@
                     onclick="deleteCategory(event,'{{$item->id}}','{{route('DeleteCategory')}}')"><i
                         class="fa fa-times"></i>
                 </a>
-                <input type="checkbox" id="category-{{$key+1}}" name="categorys[]" value="{{$item->name}}"
+                <input type="checkbox" id="category-{{$key+1}}" name="categories[]" value="{{$item->name}}"
                     class="custom-control-input scategory" @if (isset($post))
                     {{$post->categories->pluck('id')->contains($item->id) ? 'checked' : ''}} @endif>
                 <label class="custom-control-label" for="category-{{$key+1}}">{{$item->name}}</label>

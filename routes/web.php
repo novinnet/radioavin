@@ -2,11 +2,14 @@
 
 Route::get('/admin/login', 'Panel\LoginController@Login')->name('Admin.Login');
 Route::post('/admin/login', 'Panel\LoginController@Verify')->name('Admin.Login');
-Route::get('/', function () {
-    return view('Front.index');
-})->name('MainUrl');
 
 // q]Ahy;dA~mmk
+Route::get('/login', 'Front\LoginController@Login')->name('login');
+Route::post('/login', 'Front\LoginController@Verify')->name('login');
+Route::get('/register', 'Front\LoginController@Register')->name('S.Register');
+Route::post('/register', 'Front\LoginController@ConfirmRegister')->name('S.Register');
+
+
 
 Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::get('/', 'Panel\DashboardController@Index')->name('BaseUrl');
@@ -88,3 +91,33 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
 
     Route::post('ajax/file/delete', 'Panel\VideoController@DeleteFile')->name('Ajax.DeleteFile');
 });
+
+
+Route::group([], function () {
+    Route::get('/', 'Front\MainController@index')->name('MainUrl');
+    Route::get('videos/{slug}', 'Front\MovieController@Show')->name('ShowVideo');
+    Route::get('musics/{slug}', 'Front\MusicController@Show')->name('ShowMusic');
+    Route::get('podcasts/{slug}', 'Front\MusicController@Show')->name('ShowPodcast');
+
+    Route::get('/testapi', 'Panel\ImdbController@testApi')->name('Test.Api');
+    Route::get('/mp3s', 'Front\MusicController@All')->name('Mp3s');
+    Route::get('/series', 'Front\SerieController@All')->name('AllSeries');
+    Route::get('/childs', 'Front\ChildController@Show')->name('Childrens');
+    Route::get('/categories', 'Front\CategoryController@All')->name('Categories');
+    Route::get('/category/{name}', 'Front\CategoryController@Show')->name('Category.Show');
+    Route::post('/addcomment/{post}', 'Front\CommentController@Save')->name('SaveComment');
+    Route::post('/getcomment/{post}/ajax', 'Front\CommentController@getCommentAjax')->name('GetCommentAjax');
+    Route::post('/ajax/getmoviedetail', 'Front\AjaxController@getMovieDetail')->name('GetMovieDetail');
+    Route::get('/logout', 'Front\LoginController@logout')->name('logout-user');
+    Route::get('/download/{id}', 'Front\MainController@DownLoad')->name('DownLoad');
+    Route::get('/myfavorite', 'Front\MainController@MyFavorite')->name('S.MyFavorite');
+    Route::get('/showall', 'Front\MainController@ShowMore')->name('S.ShowMore');
+    Route::get('/play/{slug}', 'Front\MainController@Play')->name('S.Play');
+    Route::get('/play/{slug}/{season}/{section}', 'Front\MainController@Play')->name('S.Series.Play');
+
+    Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
+    Route::post('ajax/search', 'Front\AjaxController@Search')->name('S.Search');
+    Route::post('ajax/favorite', 'Front\AjaxController@addToFavorite')->name('S.addToFavorite');
+});
+
+

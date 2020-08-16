@@ -39,7 +39,7 @@
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="<?php if(isset($artist)): ?>
                                              <?php echo e(asset($artist->photo)); ?> 
                                                 <?php else: ?>
-                                                 <?php echo e(asset('assets/images/640x360.png')); ?> 
+                                                 <?php echo e(asset('assets/images/images.png')); ?> 
                                             <?php endif; ?>">
                                         <input type="file" name="poster" id="poster" />
                                     </div>

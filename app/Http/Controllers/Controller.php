@@ -8,6 +8,7 @@ use App\Lyric;
 use App\PlayList;
 use App\Arrangement;
 use App\Artist;
+use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -62,13 +63,13 @@ class Controller extends BaseController
                         $fileName = 'video_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
                         $video[1]->move(public_path($destinationPath), $fileName);
                         $videoPath = "$destinationPath/$fileName";
-                        $post->files()->create(['url'=>$videoPath,'type'=>'video','quality_id'=>$video[2]]);
+                        $post->files()->create(['url' => $videoPath, 'type' => 'video', 'quality_id' => $video[2]]);
                     }
                 }
             }
-              if (isset($request->captions)) {
+            if (isset($request->captions)) {
                 foreach ($request->captions as $key => $caption) {
-                    if (!is_null($caption[2]) && !is_null($caption[1]) ) {
+                    if (!is_null($caption[2]) && !is_null($caption[1])) {
                         if (!File::exists($destinationPath)) {
                             File::makeDirectory($destinationPath, 0777, true);
                         }
@@ -76,12 +77,12 @@ class Controller extends BaseController
                         $fileName = 'video_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
                         $caption[2]->move(public_path($destinationPath), $fileName);
                         $captionPath = "$destinationPath/$fileName";
-                        $post->captions()->create(['url'=>$captionPath,'lang'=>$caption[1]]);
+                        $post->captions()->create(['url' => $captionPath, 'lang' => $caption[1]]);
                     }
                 }
             }
         }
-        
+
 
         if ($post->type !== 'video') {
             if (isset($request->playLists)) {
@@ -110,15 +111,18 @@ class Controller extends BaseController
             }
             if (isset($request->albums)) {
                 foreach ($request->albums as $key => $album) {
-                    if ($id = Album::check($album)) {
-                        $post->albums()->attach($id);
-                    } else {
-
-                        $post->albums()->create(['name' => $album]);
+                    
+                        $post->albums()->attach($album);
+                   
+                }
+            }
+            if (isset($request->categories)) {
+                foreach ($request->categories as $key => $cat) {
+                    if ($id = Category::check($cat)) {
+                        $post->categories()->attach($id);
                     }
                 }
             }
-
             if (isset($request->file)) {
 
                 $picextension = $request->file('file')->getClientOriginalExtension();
@@ -135,14 +139,14 @@ class Controller extends BaseController
     }
 
 
-    public function editInformation(Request $request, $post , $destinationPath = null)
+    public function editInformation(Request $request, $post, $destinationPath = null)
     {
 
 
-         if ($post->type == 'video') {
+        if ($post->type == 'video') {
             if (isset($request->file)) {
                 foreach ($request->file as $key => $video) {
-                    if (array_key_exists(1,$video) && !is_null($video[1])) {
+                    if (array_key_exists(1, $video) && !is_null($video[1])) {
 
                         if (!File::exists($destinationPath)) {
                             File::makeDirectory($destinationPath, 0777, true);
@@ -151,13 +155,13 @@ class Controller extends BaseController
                         $fileName = 'video_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
                         $video[1]->move(public_path($destinationPath), $fileName);
                         $videoPath = "$destinationPath/$fileName";
-                        $post->files()->create(['url'=>$videoPath,'type'=>'video','quality_id'=>$video[2]]);
+                        $post->files()->create(['url' => $videoPath, 'type' => 'video', 'quality_id' => $video[2]]);
                     }
                 }
             }
-              if (isset($request->captions)) {
+            if (isset($request->captions)) {
                 foreach ($request->captions as $key => $caption) {
-                    if (array_key_exists(1,$caption) && array_key_exists(2,$caption) &&  !is_null($caption[2]) && !is_null($caption[1]) ) {
+                    if (array_key_exists(1, $caption) && array_key_exists(2, $caption) &&  !is_null($caption[2]) && !is_null($caption[1])) {
                         if (!File::exists($destinationPath)) {
                             File::makeDirectory($destinationPath, 0777, true);
                         }
@@ -165,7 +169,7 @@ class Controller extends BaseController
                         $fileName = 'video_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
                         $caption[2]->move(public_path($destinationPath), $fileName);
                         $captionPath = "$destinationPath/$fileName";
-                        $post->captions()->create(['url'=>$captionPath,'lang'=>$caption[1]]);
+                        $post->captions()->create(['url' => $captionPath, 'lang' => $caption[1]]);
                     }
                 }
             }
@@ -203,6 +207,17 @@ class Controller extends BaseController
             }
         }
 
+        if (isset($request->categories)) {
+            foreach ($request->categories as $key => $cat) {
+                if ($post->categories()->pluck('name')->contains($cat)) {
+                    continue;
+                }
+                if ($id = Category::check($cat)) {
+                    $post->categories()->attach($id);
+                }
+            }
+        }
+
 
         if (isset($request->arrangements)) {
             foreach ($request->arrangements as $key => $arrangement) {
@@ -219,15 +234,12 @@ class Controller extends BaseController
         }
         if (isset($request->albums)) {
             foreach ($request->albums as $key => $album) {
-                if ($post->albums()->pluck('name')->contains($album)) {
+                if ($post->albums()->pluck('id')->contains($album)) {
                     continue;
                 }
-                if ($id = Album::check($album)) {
-                    $post->albums()->attach($id);
-                } else {
-
-                    $post->albums()->create(['name' => $album]);
-                }
+               
+                    $post->albums()->attach($album);
+              
             }
         }
     }

@@ -41,7 +41,7 @@
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($artist)
                                              {{asset($artist->photo)}} 
                                                 @else
-                                                 {{asset('assets/images/640x360.png')}} 
+                                                 {{asset('assets/images/images.png')}} 
                                             @endisset">
                                         <input type="file" name="poster" id="poster" />
                                     </div>

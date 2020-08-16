@@ -16,20 +16,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
-
                             <div class="form-group col-md-6">
                                 <label for=""><span class="text-danger">*</span> Name : </label>
                                 <input required type="text" class="form-control" name="name" id="name"
-                                    value="<?php echo e($playlist->fullname ?? ''); ?>" placeholder="" required>
+                                    value="<?php echo e($playlist->namae ?? ''); ?>" placeholder="" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for=""><span class="text-danger">*</span> Type : </label>
-                               <select name="type" id="type" class="form-control custom-checkbox">
-                                   <option value="playlist">playlist</option>
-                                   <option value="album">album</option>
-                               </select>
-                            </div>
-
                         </div>
                         <div class="row mt-3">
                             <div class="form-group col-md-5">
@@ -43,9 +34,8 @@
                                                 <?php else: ?>
                                                  <?php echo e(asset('assets/images/640x360.png')); ?> 
                                             <?php endif; ?>">
-                                        <input type="file" name="poster" id="poster" <?php if(!isset($playlist)): ?>
-                                            required
-                                        <?php endif; ?>/>
+                                        <input type="file" name="poster" id="poster" <?php if(!isset($playlist)): ?> required
+                                            <?php endif; ?> />
                                     </div>
                                 </div>
                             </div>
@@ -54,17 +44,17 @@
                             <div class="form-group col-md-12">
                                 <label for="desc">Information: </label>
                                 <textarea class="form-control" name="bio" id="bio" cols="30"
-                                    rows="8"><?php echo e($playlist->bio ?? ''); ?></textarea>
+                                    rows="8"><?php echo e($playlist->information ?? ''); ?></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for=""><span class="text-danger">*</span> Add Songs: </label>
-                                <select name="songs[]" class="js-example-basic-single" multiple dir="rtl" >
+                                <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
                                     <?php $__currentLoopData = $songs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $song): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($song->id); ?>"
-                                        <?php echo e(isset($post) && $post->songs()->pluck('id')->contains($song->id) ? 'selected' : ''); ?>>
-                                        <?php echo e($song->name); ?></option>
+                                        <?php echo e(isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''); ?>>
+                                        <?php echo e($song->title); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
@@ -77,9 +67,9 @@
                             <?php if(isset($playlist)): ?>
                             Edit PlayList
                             <?php else: ?>
-                        Add PlayList
+                            Add PlayList
                             <?php endif; ?>
-                             </button>
+                        </button>
                     </div>
                 </div>
             </form>

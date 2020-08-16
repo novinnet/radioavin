@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('post_author');
             $table->string('title');
+            $table->string('slug');
             $table->enum('type',['music','podcast','video']);
             $table->text('description')->nullable();
             $table->string('poster')->nullable();

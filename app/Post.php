@@ -3,14 +3,32 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Post extends Model
 {
+     use Sluggable;
     protected $guarded = ['id'];
    
     protected $casts = [
         'awards' => 'array',
     ];
+
+    
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     public function albums()
     {
@@ -59,6 +77,38 @@ class Post extends Model
       public function categories()
     {
         return $this->belongsToMany(Category::class, 'post_category', 'post_id', 'category_id');
+    }
+
+     public function singers()
+    {
+        $first = $this->artists->where('role','singer')->first();
+        if($first) {
+            return $first->fullname;
+        }
+    }
+
+    public function url()
+    {
+        $type = $this->type;
+        if($type == 'music') {
+            return route('ShowMusic',$this->slug);
+        }
+        if($type == 'podcast') {
+            return route('ShowPodcast',$this->slug);
+        }
+        if($type == 'video') {
+            return route('ShowVideo',$this->slug);
+        }
+    }
+
+    public function relatedPosts()
+    {
+       $cats =  $this->categories()->pluck('name');
+        
+      return $posts = Post::whereHas('categories',function($q)use($cats){
+           $q->whereIn('name',$cats);
+       })->get();
+       
     }
 
     

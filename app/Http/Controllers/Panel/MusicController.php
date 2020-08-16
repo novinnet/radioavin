@@ -43,15 +43,15 @@ class MusicController extends Controller
         $albums = Album::all();
         $singers = Artist::whereRole('singer')->get();
         $writers = Artist::whereRole('writer')->get();
-        return view('Panel.Music.add', compact(['playlists', 'singers', 'writers','albums']));
+        return view('Panel.Music.add', compact(['playlists', 'singers', 'writers', 'albums']));
     }
 
 
 
     public function Save(Request $request)
     {
+        // dd($request->all());
 
-       
         $slug = Str::slug($request->title);
 
         $destinationPath = "music/$slug";
@@ -84,58 +84,23 @@ class MusicController extends Controller
     public function Edit(Post $post)
     {
 
- $playlists = PlayList::all();
+        $playlists = PlayList::all();
+        $albums = Album::all();
         $singers = Artist::whereRole('singer')->get();
         $writers = Artist::whereRole('writer')->get();
-        return view('Panel.Music.add', compact(['post','playlists','singers','writers']));
+        return view('Panel.Music.add', compact(['post', 'playlists', 'albums', 'singers', 'writers']));
     }
 
 
 
-    public function AddEpisode()
-    {
-        $id = request()->id;
-        if ($id) {
-            $post = Post::find($id);
-            $episodes = $post->episodes;
-        } else {
-            $episodes = [];
-            $post = null;
-        }
-        return view('Panel.Files.AddEpisode', compact(['id', 'episodes', 'post']));
-    }
 
-    public function SaveEpisode(Request $request)
-    {
 
-        $post = Post::find($request->post);
-        if (request()->hasFile('thumb')) {
-            $destinationPath = 'files/series/thumbs';
-            $picextension = request()->file('thumb')->getClientOriginalExtension();
-            $fileName = $post->name . '-' . $request->season . '-' . $request->section . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            request()->file('thumb')->move($destinationPath, $fileName);
-            $thumb = "$destinationPath/$fileName";
-        } else {
-            $thumb = '';
-        }
-
-        $episode = $post->episodes()->create([
-            'name' => $request->name,
-            'duration' => '00',
-            'description' => $request->description,
-            'poster' => $thumb,
-            'season' => $request->season,
-            'section' => $request->section,
-        ]);
-
-        return Redirect::route('Panel.UploadVideo', ['id' => $post->id, 'episode' => $episode->id]);
-    }
 
     public function EditMusic(Request $request, Post $post)
     {
 
+        //  dd($request->all());
 
-        
         $slug = Str::slug($post->name);
 
         $destinationPath = "music/$slug";

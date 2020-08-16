@@ -1,3 +1,5 @@
+@import url("../../assets/css/font/kurdi.css");
+
 body {
     overflow-x: hidden;
     background: #000000;
@@ -11,8 +13,6 @@ body {
     font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-style: normal;
-
-
 }
 
 .top-header {
@@ -339,8 +339,17 @@ ul, li {
 }
 
 .music-cart img {
-    width: 100%
+    width: 100%;
+    
 }
+.artist img {
+    width: 100%;
+    height:160px;
+    
+}
+
+
+
 
 .music-cart-wrapper:hover .img-cover {
     background: rgba(0, 0, 0, 0.09);
@@ -1211,6 +1220,7 @@ i.fa-step-backward {
 
 /****************************************************************************/
 .lyrics-span {
+    font-family: 'kurdi' !important;
     color: #fff;
     justify-content: center;
     text-align: center;
@@ -1379,9 +1389,9 @@ div#login_forgot>a{
 .parsley-validate input {
     width: 100%;
     outline: none;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
-    padding: 2px 10px;
+    padding: 7px 10px;
     font-size: 14px;
     border-radius: 5px;
 }
@@ -1437,3 +1447,126 @@ ul.top-header-menu.text-right {
         border-bottom-right-radius: 0 !important;
 
 }
+.music-cart img{
+
+}
+
+.add-favorite{
+   position: absolute;
+    display: block !important;
+    width: 30px;
+    height: 30px;
+    right: 0;
+    top: 36%;
+    border-radius: 4px;
+    padding: 4px;
+    text-align: center;
+    align-items: center;
+    background: #7d7d7d;
+    color: white;
+}
+
+.submit-button{
+   display: block;
+    background: rgb(157 157 157 / 80%);
+    color: white;
+    padding: 4px;
+    width: 100%;
+    border-radius: 4px;
+    border: none;
+}
+
+label.error {
+    color: red;
+    font-size: 13px;
+    text-align: left;
+    display: block;
+    margin-top: -15px;
+}
+
+/* slider */
+  #touchSlider5 {
+
+                position: relative;
+                overflow: hidden;
+            }
+
+            #touchSlider5 ul {
+                position: absolute;
+                top: 0;
+                left: 0;
+                overflow: hidden;
+            }
+
+            #touchSlider5 ul li {
+
+
+                font-size: 14px;
+                color: #fff;
+            }
+
+            .ts-paging {
+                display: none;
+            }
+
+            button.ts-next:hover::after,
+            button.ts-prev:hover::after {
+                opacity: 1;
+                -webkit-transition: 0.3s all;
+                -moz-transition: 0.3s all;
+                -ms-transition: 0.3s all;
+                -o-transition: 0.3s all;
+                transition: 0.3s all;
+            }
+
+            button.ts-next::after {
+                content: " > ";
+                font-size: 36px;
+                color: #fff;
+                opacity: 0.6;
+                -webkit-transition: 0.3s all;
+                -moz-transition: 0.3s all;
+                -ms-transition: 0.3s all;
+                -o-transition: 0.3s all;
+                transition: 0.3s all;
+            }
+
+            button.ts-prev::after {
+                content: " < ";
+
+                font-size: 36px;
+                color: #fff;
+                opacity: 0.6;
+                -webkit-transition: 0.3s all;
+                -moz-transition: 0.3s all;
+                -ms-transition: 0.3s all;
+                -o-transition: 0.3s all;
+                transition: 0.3s all;
+            }
+
+            button.ts-next {
+                font-size: 0;
+                position: absolute;
+
+                right: 20px;
+
+                top: 42%;
+                transform: translateY(-100%);
+                background: transparent;
+                border: 0;
+                outline: none;
+            }
+
+
+            button.ts-prev {
+                font-size: 0;
+                position: absolute;
+
+                left: 20px;
+
+                top: 42%;
+                transform: translateY(-100%);
+                background: transparent;
+                border: 0;
+                outline: none;
+            }
