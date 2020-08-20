@@ -51,7 +51,7 @@
         function (value, element, param) {
             return this.optional(element) || element.files[0].size <= param;
         },
-        "سایز تصویر نمی تواند بیشتر از دو مگابایت باشد"
+        "سایز تصویر نمی تواند بیشتر از یک مگابایت باشد"
     );
     $.validator.addMethod(
         "regex",
@@ -234,7 +234,7 @@
 
             poster: {
                 
-                filesize: 200 * 1024,
+                filesize: 1000 * 1024,
                 accept: "jpg|jpeg|png|JPG|JPEG|PNG",
             },
             released: "required",

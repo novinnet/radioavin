@@ -29,7 +29,9 @@ class GalleryController extends Controller
         $gallery->name = $request->title;
         $destinationPath = 'gallery/' . $request->title;
         $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
-        $gallery->poster = $Poster;
+        $banner =    $this->image_resize(450,450,$Poster,$destinationPath);
+
+        $gallery->poster = serialize(['org' => $Poster, 'banner' => $banner]);
         if ($gallery->save()) {
             foreach ($request->images as $key => $image) {
                 $Poster = $this->SavePoster($image, 'image-', $destinationPath);
@@ -48,7 +50,7 @@ class GalleryController extends Controller
     {
 
         $gallery = Gallery::find($request->gallery_id);
-        File::deleteDirectory(public_path() . $gallery->title . '/');
+        File::deleteDirectory(public_path("gallery/$gallery->title/"));
         $gallery->images()->delete();
         $gallery->delete();
         toastr()->success('گالری با موفقیت حذف شد');

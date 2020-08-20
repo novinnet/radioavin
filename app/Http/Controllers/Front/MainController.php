@@ -29,9 +29,7 @@ class MainController extends Controller
 
     public function Play()
     {
-       
-
-
+    
             $model = Post::where('slug', request()->slug)->first();
             if (!$model) {
                 abort(404);
@@ -40,7 +38,6 @@ class MainController extends Controller
             if ($model->type == 'movies') {
                 $post = $model;
                 $videos = $model->videos;
-
 
                 if (count($videos) == 0) {
                     return back();
@@ -64,8 +61,6 @@ class MainController extends Controller
     public function DownLoad($id)
     {
        
-        
-        
         $post = Post::find($id);
         $url = $post->videos->first()->url;
         $path      = parse_url($url, PHP_URL_PATH);

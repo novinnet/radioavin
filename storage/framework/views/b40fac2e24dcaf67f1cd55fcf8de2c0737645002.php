@@ -1,5 +1,6 @@
 <?php $__env->startSection('title',$title); ?>
 <?php $__env->startSection('main'); ?>
+<?php echo $__env->make('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'photo'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <div class="position-relative mb-5 mt-page">
     <div id="touchSlider5" class="">

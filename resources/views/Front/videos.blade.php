@@ -1,7 +1,7 @@
 @extends('Layout.Front')
 
 @section('main')
-@include('Includes.Front.TopSlider')
+@include('Includes.Front.TopSlider',['sliders'=>$sliders,'type'=>'video'])
 @include('Includes.Front.Alfabet')
 @if (count($trending))
 <div class="container mt-page ">

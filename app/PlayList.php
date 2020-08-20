@@ -12,6 +12,8 @@ class PlayList extends Model
         'image' => 'array',
     ];
 
+    protected $with = ['tracks'];
+
     public static function check($id)
     {
         if ($obj = static::where('id', $id)->first()) {

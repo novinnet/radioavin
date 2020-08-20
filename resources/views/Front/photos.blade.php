@@ -1,6 +1,7 @@
 @extends('Layout.Front')
 @section('title',$title)
 @section('main')
+@include('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'photo'])
 
 <div class="position-relative mb-5 mt-page">
     <div id="touchSlider5" class="">
