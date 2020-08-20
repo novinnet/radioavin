@@ -29,6 +29,7 @@ class LoginController extends Controller
 
     public function Verify(Request $request)
     {
+        
       
         if (filter_var($request->username, FILTER_VALIDATE_EMAIL)) {
             $rules = array(
@@ -108,11 +109,9 @@ class LoginController extends Controller
 
     public function logout()
     {
-        if (Auth::guard('admin')->check()) {
-            Auth::guard('admin')->logout();
-        }
+        
 
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('MainUrl');
     }
 }

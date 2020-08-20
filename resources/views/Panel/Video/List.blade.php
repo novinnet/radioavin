@@ -40,25 +40,20 @@
                     <td>
                         <a href="#" class="text-primary">{{$post->title}}</a>
                     </td>
-                    <td>{{$post->singer}}</td>
+                    <td>{{$post->singers()}}</td>
                     <td class="text-success">{{$post->duration}}</td>
                    
                     <td>
-                    <img src="{{asset($post->poster)}}" alt="" width="100px">
+                    <img src="{{asset($post->poster[1])}}" alt="" width="100px">
                     </td>
                     <td>
                         <a href="{{route('Panel.EditVideo',$post)}}" class="btn btn-sm btn-info">ویرایش</a>
                         <a href="#" data-id="{{$post->id}}" title="حذف " data-toggle="modal" data-target="#deletePost"
                             class="btn btn-sm btn-danger   m-2">
-
                             <i class="fa fa-trash"></i>
-
                         </a>
-
                     </td>
                     @endforeach
-
-
             </tbody>
         </table>
 

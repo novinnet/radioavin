@@ -34,7 +34,7 @@ class MusicController extends Controller
                 'id' => $item->id,
                 'name' => $item->title,
                 'artist' => $item->singers(),
-                'image' => asset($item->poster),
+                'image' => asset($item->poster[3]),
                 'path' => asset($item->files->first()->url),
                 'lyric' => $item->description
             ];
@@ -45,27 +45,36 @@ class MusicController extends Controller
         $data['track_lists'] = json_encode($array);
 
         return view(
-            'Front.show',
+            'Front.show-music',
             $data
         );
     }
 
     public function All()
     {
+
        
-        // $sliders = Slider::whereHas('post', function ($q) {
-        //     $q->where('type', 'series');
-        // })->latest()->take(5)->get();
+        $sliders = Post::where('type', 'music')->latest()->take(10)->get();
+        $trending = Post::where('type', 'music')->orderBy('views', 'DESC')->get();
+        $featured = Post::whereHas('categories', function ($q) {
+            $q->where('name', 'featured songs');
+        })->get();
 
-        // if (count($sliders)) {
-        //     $data['sliders'] = $sliders;
-        // } else {
-        //     $data['sliders'] = Slider::latest()->take(5)->get();
-        // }
+        $data['this_week'] = Post::where('type', 'music')->
+        whereDate('created_at', '>', Carbon::now()->subWeeks(1)->toDateString())
+        ->orderBy('views', 'DESC')->take(8)->get();
+        $data['this_month'] = Post::where('type', 'music')->
+        whereDate('created_at', '>', Carbon::now()->subMonths(1)->toDateString())
+        ->orderBy('views', 'DESC')->take(8)->get();
+        $data['all_time'] = Post::where('type', 'music')
+        ->orderBy('views', 'DESC')->take(8)->get();
 
-        // $data['newseries'] = $newseries;
-       
 
-        return view('Front.mp3s');
+        $data['sliders'] = $sliders;
+        $data['trending'] = $trending;
+        $data['featured'] = $featured;
+
+
+        return view('Front.mp3s', $data);
     }
 }

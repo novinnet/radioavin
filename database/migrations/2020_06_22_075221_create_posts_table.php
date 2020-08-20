@@ -20,11 +20,12 @@ class CreatePostsTable extends Migration
             $table->string('slug');
             $table->enum('type',['music','podcast','video']);
             $table->text('description')->nullable();
-            $table->string('poster')->nullable();
+            $table->text('poster')->nullable();
             $table->string('duration')->nullable();
             $table->string('released')->nullable();
             $table->string('comment_status')->nullable();
             $table->unsignedBigInteger('views')->default(0);
+            $table->boolean('featured')->default(0);
             $table->timestamps();
         });
     }

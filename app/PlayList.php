@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PlayList extends Model
 {
     protected $guarded = ['id'];
+    protected $casts = [
+       
+        'image' => 'array',
+    ];
+
     public static function check($id)
     {
         if ($obj = static::where('id', $id)->first()) {
@@ -16,7 +21,11 @@ class PlayList extends Model
         }
     }
 
-       public function posts()
+     public function playurl()
+    {
+        return route('Play.Playlist',['id'=>$this->id]).'?type=c';
+    }
+       public function tracks()
     {
         return $this->belongsToMany(Post::class, 'post_playlist','play_list_id','post_id');
     }

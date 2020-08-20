@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers\Panel;
 
-use Goutte;
-use App\Tag;
 use App\Post;
-use App\Actor;
+
 use App\Album;
 use App\Artist;
 use App\Image;
-use App\Writer;
-use App\Episode;
-use App\Quality;
+
 use App\Category;
-use App\Director;
-use App\Language;
 use App\PlayList;
 use Carbon\Carbon;
 use App\File as Fil;
@@ -23,9 +17,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use Image as ImageResize;
 
 class MusicController extends Controller
 {
@@ -51,6 +45,7 @@ class MusicController extends Controller
     public function Save(Request $request)
     {
         // dd($request->all());
+        
 
         $slug = Str::slug($request->title);
 
@@ -64,12 +59,20 @@ class MusicController extends Controller
         } else {
             $post->type = 'music';
         }
+         if ($request->featured && $request->featured == 1) {
+            $post->featured =1;
+        } else {
+            $post->featured = 0;
+        }
         $post->description = $request->translation;
-
-        $Poster = $this->SavePoster($request, $destinationPath);
+        $Poster = $this->SavePoster($request->file('poster'),'poster-', $destinationPath);
+        $poster161 =  $this->image_resize(161,161,$Poster,$destinationPath);
+        $banner =    $this->image_resize(440,212,$Poster,$destinationPath);
+       
         $post->released = Carbon::parse($request->released)->toDateTimeString();
-        $post->poster = $Poster;
-        $post->duration = '12';
+        $post->poster = serialize(['org' => $Poster, 'resize' => $poster161, 'banner' => $banner]);
+       
+        $post->duration = $this->get_duration($request->file('file'));
         if ($post->save()) {
 
             $this->saveInformation($request, $post, $destinationPath);
@@ -123,7 +126,12 @@ class MusicController extends Controller
         $post->description = $request->translation;
         $post->released = Carbon::parse($request->released)->toDateTimeString();
         $post->poster = $Poster;
-        $post->duration = '12';
+       
+         if ($request->featured && $request->featured == 1) {
+            $post->featured =1;
+        } else {
+            $post->featured = 0;
+        }
         $post->update();
 
 
@@ -140,16 +148,15 @@ class MusicController extends Controller
 
 
         $post = Post::find($request->post_id);
-        File::delete(public_path() . $post->poster);
+        if($post->type == 'video') {
 
-
-        if ($post->type == 'video') {
-            foreach ($post->files as $key => $video) {
-                File::delete(public_path() . $video->url);
-
-                $video->delete();
-            }
+            File::deleteDirectory(public_path("videos/$post->slug/"));
+        }else{
+            File::deleteDirectory(public_path("music/$post->slug/"));
         }
+        $post->files()->delete();
+        $post->captions()->delete();
+      
         $post->delete();
 
         toastr()->success('پست با موفقیت حذف شد');

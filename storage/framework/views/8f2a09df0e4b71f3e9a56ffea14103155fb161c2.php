@@ -108,7 +108,7 @@
 
                 <div class="col-5 col-md-4 border-top-my d-inline-block d-md-none">
                     <div class="logo">
-                        <a class="logo-url" href="./index.html">
+                        <a class="logo-url" href="<?php echo e(route('MainUrl')); ?>">
                             <img src="<?php echo e(asset('frontend/images/screencapture-radiojavan-2020-07-13-15_06_28.png')); ?>"
                                 height="38" width="172" />
                         </a>
@@ -117,32 +117,43 @@
                 <div class="col-7 col-md-4 border-top-my pr-">
                     <ul class="top-header-menu text-right">
                         <li class="text-red d-none d-md-block"><a href="#">Listen Now</a></li>
+                        <li class=" d-none d-md-block"><a href="#">Play List</a></li>
+                        <?php if(auth()->guard()->check()): ?>
+                        <li class="d-none d-md-block">
+                            <button class="profile-icon" aria-describedby="ui-tooltip-1">
+                                <i class="fa fa-user"></i>
+                            </button>
+                        </li>
+                        <div class="profile-content hidden">
+                            <h5>WelCome </h5>
+                            <h6>sdfsfs</h6>
+                            <div class="user-links">
+                                <a href="#">Profile</a>
+                                <a href="<?php echo e(route('logout-user')); ?>">Logout</a>
+                            </div>
+                        </div>
+                        <?php else: ?>
                         <li class="position-relative">
                             <span class="login_modal_lbl">Log In</span>
                             <div id="login-modal" style="display: none">
                                 <div id="user_account_dropdown">
-                                    <form id="login_form" action="/login" accept-charset="UTF-8" method="post">
-                                        <input name="utf8" type="hidden" value="✓"><input type="hidden"
-                                            name="authenticity_token"
-                                            value="i0AXqQc0VVFjZ97DRZCpV7p/OjLmGr2IKovY6Hlvwi+hwQHCZPLZCvEYmL10PdGUsEN5VM4/G1I7XH1L4b56/g==">
-                                        <input type="text" name="login_email" id="login_email" placeholder="Email">
-                                        <input type="hidden" name="redirect" id="redirect" value="/signup">
-                                        <input type="password" name="login_password" id="login_password"
-                                            placeholder="Password" class="twelve">
-                                        <span class="button primaryButton" id="login_button">Log In</span>
+                                    <form id="login_form" action="<?php echo e(route('login')); ?>" accept-charset="UTF-8"
+                                        method="post">
+                                        <?php echo csrf_field(); ?>
+                                        <input type="text" name="username" id="username" placeholder="User Name"
+                                            required>
+                                        <input type="password" name="password" id="Password" placeholder="Password"
+                                            class="twelve" required>
+                                        <button type="submit" class="submit-button">Login</button>
                                     </form>
                                     <hr>
                                     <div id="login_signup">
                                         Don't have an account?
-                                        <a href="/singup.html" data-no-turbolink="data-no-turbolink"
+                                        <a href="<?php echo e(route('S.Register')); ?>" data-no-turbolink="data-no-turbolink"
                                             class="button linkButton">Sign Up</a>
                                     </div>
                                     <hr>
-                                    <span id="facebook_button" class="button textButton" style="">
-                                        <a data-no-turbolink="" href="#">
-                                            <span>Login With Facebook</span>
-                                        </a>
-                                    </span>
+
                                     <hr>
                                     <div id="login_forgot">
                                         <a href="/account/forgot" data-no-turbolink="data-no-turbolink"
@@ -152,6 +163,7 @@
                             </div>
                         </li>
                         <li><a href="<?php echo e(route('S.Register')); ?>">Sign Up</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
@@ -161,7 +173,7 @@
         <div class="row justify-content-between nav-menu overflow-hidden">
             <div class="nav-menu-logo">
                 <div class="logo">
-                    <a class="logo-url" href="#">
+                    <a class="logo-url" href="<?php echo e(route('MainUrl')); ?>">
                         <img src="<?php echo e(asset('frontend/images/screencapture-radiojavan-2020-07-13-15_06_28.png')); ?>"
                             height="38" width="172" />
                     </a>
@@ -172,10 +184,10 @@
                 <nav>
                     <ul>
                         <li><a href="<?php echo e(route('Mp3s')); ?>">Music</a></li>
-                        <li><a href="./playlist.html">PlayList</a></li>
-                        <li><a href="./videos.html">Videos</a></li>
+                        <li><a href="<?php echo e(route('Playlists')); ?>">PlayList</a></li>
+                        <li><a href="<?php echo e(route('Videos')); ?>">Videos</a></li>
                         <li><a href="./podcasts.html">Podcasts</a></li>
-                        <li><a href="./photos.html">Photos</a></li>
+                        <li><a href="<?php echo e(route('Photos')); ?>">Photos</a></li>
                         <!-- <li><a href="#">Music</a></li> -->
                     </ul>
                 </nav>

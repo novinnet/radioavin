@@ -14,7 +14,10 @@
                             Videos
                             @endif
                         </a></li>
-                  
+                        @isset($playlist)
+                        <li><a href="#">{{$playlist->name}}</a></li>
+                        @endisset
+                            
                     <li class="current"><a href="#">{{$post->title}}</a></li>
                 </ul>
             </div>

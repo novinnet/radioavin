@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Image;
 
 class Controller extends BaseController
 {
@@ -69,7 +70,7 @@ class Controller extends BaseController
             }
             if (isset($request->captions)) {
                 foreach ($request->captions as $key => $caption) {
-                    if (!is_null($caption[2]) && !is_null($caption[1])) {
+                    if (!is_null($caption[1]) && isset($caption[2]) && !is_null($caption[2])) {
                         if (!File::exists($destinationPath)) {
                             File::makeDirectory($destinationPath, 0777, true);
                         }
@@ -111,9 +112,8 @@ class Controller extends BaseController
             }
             if (isset($request->albums)) {
                 foreach ($request->albums as $key => $album) {
-                    
-                        $post->albums()->attach($album);
-                   
+
+                    $post->albums()->attach($album);
                 }
             }
             if (isset($request->categories)) {
@@ -237,26 +237,48 @@ class Controller extends BaseController
                 if ($post->albums()->pluck('id')->contains($album)) {
                     continue;
                 }
-               
-                    $post->albums()->attach($album);
-              
+
+                $post->albums()->attach($album);
             }
         }
     }
 
 
-    public function SavePoster(Request $request, $destinationPath)
+    public function SavePoster($file,$name, $destinationPath)
     {
-        if ($request->hasFile('poster')) {
+        if ($file) {
             if (!File::exists($destinationPath)) {
                 File::makeDirectory($destinationPath, 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = 'poster_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move(public_path($destinationPath), $fileName);
+            $picextension = $file->getClientOriginalExtension();
+            $fileName = $name . date("Y-m-d") . '_' . time() . '.' . $picextension;
+            $imagePath = $destinationPath . '/' . $fileName;
+            $file->move(public_path($destinationPath), $fileName);
             return "$destinationPath/$fileName";
         } else {
             return '';
         }
+    }
+     public function image_resize($width , $height , $poster , $destinationPath)
+    {
+        if ($poster !== '') {
+            
+        // dd([$file,$size,$destinationPath]);
+            $picextension = pathinfo($poster, PATHINFO_EXTENSION);
+            $fileName = $width . 'x' . $height . '-' . date("Y-m-d") . '_' . time() . '.' . $picextension;
+            $imagePath = $destinationPath . '/' . $fileName;
+            $imgs = Image::make($poster)->resize($width,$height)->save($imagePath);
+            return $imagePath;
+       
+        }
+    }
+
+
+
+    public function get_duration($file)
+    {
+        $getID3 = new \getID3;
+        $fil = $getID3->analyze($file);
+        return date('i:s', $fil['playtime_seconds']);
     }
 }

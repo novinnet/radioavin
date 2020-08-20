@@ -1,7 +1,7 @@
 <div class="col-md-4">
     {{-- singer--}}
-    
-    
+
+
     <div class="row">
         <div class="form-group col-md-12">
             <label for=""> Singer: </label>
@@ -15,11 +15,11 @@
         </div>
     </div>
 
-     
+
     <div class="row">
         <div class="form-group col-md-12">
             <label for=""> Writer: </label>
-            <select name="writers[]" class="js-example-basic-single" multiple dir="rtl" >
+            <select name="writers[]" class="js-example-basic-single" multiple dir="rtl">
                 @foreach ($writers as $writer)
                 <option value="{{$writer->id}}"
                     {{isset($post) && $post->artists->pluck('id')->contains($writer->id) ? 'selected' : ''}}>
@@ -32,8 +32,8 @@
     <h6 class="">Album: </h6>
     <div class="album row mb-3">
         <div class="col-md-12">
-          
-            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl" >
+
+            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl">
                 @foreach ($albums as $album)
                 <option value="{{$album->id}}"
                     {{isset($post) && $post->albums->pluck('id')->contains($album->id) ? 'selected' : ''}}>
@@ -121,5 +121,15 @@
     </div>
 </div>
 {{-- end playlists --}}
+
+<div class="row">
+    <div class="form-group col-md-12">
+        <div class="custom-control custom-checkbox custom-control-inline ">
+            <input type="checkbox" id="featured" name="featured" value="1" class="custom-control-input " 
+            @if(isset($post)) @endif>
+            <label class="custom-control-label" for="featured">Featured</label>
+        </div>
+    </div>
+</div>
 
 </div>

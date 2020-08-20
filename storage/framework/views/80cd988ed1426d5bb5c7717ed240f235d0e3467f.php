@@ -4,12 +4,10 @@
             <div class="music-cart">
                 <img src="images/a54141cefc06982.jpg" />
                 <div class="img-cover"></div>
-
             </div>
             <div class="songInfo center">
                 <span class="artist" title="Baran">Baran</span>
                 <span class="song" title="Migzaroonam">Migzaroonam</span>
-
             </div>
         </a>
     </div>

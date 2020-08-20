@@ -1,16 +1,17 @@
 <div class="col-6 col-md-2">
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-1">
-        <a href="#">
+        <a href="{{$item->url()}}">
             <div class="music-cart">
-                <img src="images/a54141cefc06982.jpg" />
+                <img src="{{asset(unserialize($item->poster)['resize'])}}" class="size-131" />
                 <div class="img-cover"></div>
-                <span class="tag plus"> + </span>
+
             </div>
             <div class="songInfo center">
-                <span class="artist" title="Baran">Baran</span>
-                <span class="song" title="Migzaroonam">Migzaroonam</span>
+                <span class="artist" title="{{$item->singers()}}">{{$item->singers()}}</span>
+                <span class="song" title="{{$item->title}}">{{$item->title}}</span>
 
             </div>
         </a>
     </div>
+<a href="#" onclick="call(event)" data-id="{{$item->id}}" data-type="music" class='add-to-pl' id="{{$item->id}}"> + </a>
 </div>

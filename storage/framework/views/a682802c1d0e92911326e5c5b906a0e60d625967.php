@@ -38,25 +38,20 @@
                     <td>
                         <a href="#" class="text-primary"><?php echo e($post->title); ?></a>
                     </td>
-                    <td><?php echo e($post->singer); ?></td>
+                    <td><?php echo e($post->singers()); ?></td>
                     <td class="text-success"><?php echo e($post->duration); ?></td>
                    
                     <td>
-                    <img src="<?php echo e(asset($post->poster)); ?>" alt="" width="100px">
+                    <img src="<?php echo e(asset($post->poster[1])); ?>" alt="" width="100px">
                     </td>
                     <td>
                         <a href="<?php echo e(route('Panel.EditVideo',$post)); ?>" class="btn btn-sm btn-info">ویرایش</a>
                         <a href="#" data-id="<?php echo e($post->id); ?>" title="حذف " data-toggle="modal" data-target="#deletePost"
                             class="btn btn-sm btn-danger   m-2">
-
                             <i class="fa fa-trash"></i>
-
                         </a>
-
                     </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-
             </tbody>
         </table>
 
@@ -73,42 +68,7 @@
 
 <?php $__env->startSection('js'); ?>
 <script>
-    $('table input[type="checkbox"]').change(function(){
-            if( $(this).is(':checked')){
-            $(this).parents('tr').css('background-color','#41f5e07d');
-            }else{
-                $(this).parents('tr').css('background-color','');
-
-            }
-            array=[]
-            $('table input[type="checkbox"]').each(function(){
-                if($(this).is(':checked')){
-                array.push($(this).attr('data-id'))
-
-               }
-               if(array.length !== 0){
-                $('.delete-edit').show()
-                if (array.length !== 1) {
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').hide()
-                }else{
-
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').show()
-                    
-                   
-                }
-            }
-            else{
-                $('.container_icon').removeClass('justify-content-between')
-                $('.container_icon').addClass('justify-content-end')
-                $('.delete-edit').hide()
-            }
-        })
-            
-    })
+ 
     
          $('#deletePost').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget)

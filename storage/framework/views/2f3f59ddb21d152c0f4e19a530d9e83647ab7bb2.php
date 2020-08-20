@@ -1,16 +1,17 @@
 <div class="col-6 col-md-2">
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-1">
-        <a href="#">
+        <a href="<?php echo e($item->url()); ?>">
             <div class="music-cart">
-                <img src="images/a54141cefc06982.jpg" />
+                <img src="<?php echo e(asset($item->poster[1])); ?>" class="size-131" />
                 <div class="img-cover"></div>
-                <span class="tag plus"> + </span>
+
             </div>
             <div class="songInfo center">
-                <span class="artist" title="Baran">Baran</span>
-                <span class="song" title="Migzaroonam">Migzaroonam</span>
+                <span class="artist" title="<?php echo e($item->singers()); ?>"><?php echo e($item->singers()); ?></span>
+                <span class="song" title="<?php echo e($item->title); ?>"><?php echo e($item->title); ?></span>
 
             </div>
         </a>
     </div>
+<a href="#" onclick="call(event)" data-id="<?php echo e($item->id); ?>" data-type="music" class='add-to-pl' id="<?php echo e($item->id); ?>"> + </a>
 </div><?php /**PATH C:\xampp\htdocs\radio\resources\views/components/music-box.blade.php ENDPATH**/ ?>

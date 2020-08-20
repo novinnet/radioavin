@@ -68,7 +68,7 @@
                         <div class="contentInner">
                             <div class="mp3Description">
                                 <div class="views">Plays: <?php echo e($post->views ?? ''); ?></div>
-                                <div pubdate="pubdate" class="dateAdded">Released: <?php echo e(\Carbon\Carbon::parse($post->released)->format('Y/m/d')); ?></div>
+                                <div pubdate="pubdate" class="dateAdded">Released: <?php echo e($post->released); ?></div>
                             </div>
 
                             <div class="tagsContainer">
@@ -226,8 +226,9 @@
                                        
                                    </div>
                                </a>
-                               <a href="#" onclick="addToFavorite(event, ${item.id},'${ajaxurl}')" class="add-favorite plus"> 
-                                <i class="fa fa-plus"></i>
+                               
+                               <a href="#" onclick="call(event)" data-id="${item.id}" data-type="music" class="add-favorite plus"> 
+                                +
                                 </a>
                            </div>`
         i++

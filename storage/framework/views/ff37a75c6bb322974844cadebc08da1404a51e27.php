@@ -1,7 +1,7 @@
 <div class="col-md-4">
     
-    
-    
+
+
     <div class="row">
         <div class="form-group col-md-12">
             <label for=""> Singer: </label>
@@ -15,11 +15,11 @@
         </div>
     </div>
 
-     
+
     <div class="row">
         <div class="form-group col-md-12">
             <label for=""> Writer: </label>
-            <select name="writers[]" class="js-example-basic-single" multiple dir="rtl" >
+            <select name="writers[]" class="js-example-basic-single" multiple dir="rtl">
                 <?php $__currentLoopData = $writers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $writer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($writer->id); ?>"
                     <?php echo e(isset($post) && $post->artists->pluck('id')->contains($writer->id) ? 'selected' : ''); ?>>
@@ -32,8 +32,8 @@
     <h6 class="">Album: </h6>
     <div class="album row mb-3">
         <div class="col-md-12">
-          
-            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl" >
+
+            <select name="albums[]" class="js-example-basic-single" multiple dir="rtl">
                 <?php $__currentLoopData = $albums; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $album): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <option value="<?php echo e($album->id); ?>"
                     <?php echo e(isset($post) && $post->albums->pluck('id')->contains($album->id) ? 'selected' : ''); ?>>
@@ -101,5 +101,15 @@
     </div>
 </div>
 
+
+<div class="row">
+    <div class="form-group col-md-12">
+        <div class="custom-control custom-checkbox custom-control-inline ">
+            <input type="checkbox" id="featured" name="featured" value="1" class="custom-control-input " 
+            <?php if(isset($post)): ?> <?php endif; ?>>
+            <label class="custom-control-label" for="featured">Featured</label>
+        </div>
+    </div>
+</div>
 
 </div><?php /**PATH C:\xampp\htdocs\radio\resources\views/Includes/Panel/MusicSideForm.blade.php ENDPATH**/ ?>

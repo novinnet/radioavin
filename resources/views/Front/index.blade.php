@@ -20,12 +20,15 @@
     @if (count($category->posts))
     <div class="row">
         @foreach ($category->posts as $post)
+        @php
+            
+        @endphp
         <div class="col-6 col-md-2">
             <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-3">
             <a href="{{$post->url()}}">
                     <div class="music-cart">
                         @isset($post->poster)
-                        <img src="{{asset($post->poster)}}" />
+                        <img src="{{asset(unserialize($post->poster)['resize']) ?? ''}}" />
                         @else
                         <img src="{{asset('frontend/images/newreleases.jpg')}}" />
                         @endisset

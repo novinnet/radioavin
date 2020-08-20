@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Gallery;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 
 class GalleryController extends Controller
@@ -14,7 +15,7 @@ class GalleryController extends Controller
     {
 
         $galleries = Gallery::latest()->get();
-        return view('Panel.Photos.list',['galleries'=>$galleries]);
+        return view('Panel.Photos.list', ['galleries' => $galleries]);
     }
     public function Add()
     {
@@ -23,36 +24,34 @@ class GalleryController extends Controller
 
     public function Save(Request $request)
     {
+
         $gallery = new Gallery();
         $gallery->name = $request->title;
+        $destinationPath = 'gallery/' . $request->title;
+        $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
+        $gallery->poster = $Poster;
         if ($gallery->save()) {
-            $destinationPath = 'gallery/'. $request->title;
             foreach ($request->images as $key => $image) {
-                if ($request->hasFile('poster')) {
-                    $picextension = $request->file('poster')->getClientOriginalExtension();
-                    $fileName = 'image_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
-                    $request->file('poster')->move(public_path($destinationPath), $fileName);
-                    $url = "$destinationPath/$fileName";
-                } else {
-                    $url = '';
-                }
+                $Poster = $this->SavePoster($image, 'image-', $destinationPath);
+                $poster151 =  $this->image_resize(151, 151, $Poster, $destinationPath);
                 $gallery->images()->create([
-                    'url' => $url
+                    'url' => serialize(['org' => $Poster, 'resize' => $poster151])
                 ]);
             }
         }
 
-         toastr()->success('گالری با موفقیت ثبت شد');
+        toastr()->success('گالری با موفقیت ثبت شد');
         return Redirect::route('Panel.GalleryList');
     }
 
     public function DeleteGallery(Request $request)
     {
-        
+
         $gallery = Gallery::find($request->gallery_id);
+        File::deleteDirectory(public_path() . $gallery->title . '/');
         $gallery->images()->delete();
         $gallery->delete();
-         toastr()->success('گالری با موفقیت حذف شد');
+        toastr()->success('گالری با موفقیت حذف شد');
         return Redirect::route('Panel.GalleryList');
     }
 }

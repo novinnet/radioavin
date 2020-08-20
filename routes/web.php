@@ -9,7 +9,7 @@ Route::post('/login', 'Front\LoginController@Verify')->name('login');
 Route::get('/register', 'Front\LoginController@Register')->name('S.Register');
 Route::post('/register', 'Front\LoginController@ConfirmRegister')->name('S.Register');
 
-
+Route::get('/logout', 'Front\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::get('/', 'Panel\DashboardController@Index')->name('BaseUrl');
@@ -23,8 +23,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::put('music/add', 'Panel\MusicController@EditPost')->name('Panel.AddMusic');
     Route::get('users', 'Panel\UserController@List')->name('Panel.UserList');
     Route::post('user/add', 'Panel\UserController@Add')->name('Panel.AddUser');
-    Route::get('video/add', 'Panel\VideoController@Add')->name('Panel.AddVideo');
-    Route::post('video/add', 'Panel\VideoController@Save')->name('Panel.AddVideo');
+    Route::get('rvideo/add', 'Panel\VideoController@Add')->name('Panel.AddVideo');
+    Route::post('rvideo/add', 'Panel\VideoController@Save')->name('Panel.AddVideo');
 
 
     Route::delete('user/delete', 'Panel\UserController@Delete')->name('Panel.DeleteUser');
@@ -43,6 +43,10 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::post('playlist/add', 'Panel\PlaylistController@Save')->name('Panel.AddPlayList');
     Route::get('playlist/edit/{PlayList}', 'Panel\PlaylistController@Edit')->name('Panel.EditPlayList');
     Route::post('playlist/edit/{PlayList}', 'Panel\PlaylistController@EditSave')->name('Panel.EditPlayList');
+    Route::delete('playlist/delete', 'Panel\PlaylistController@Delete')->name('Panel.DeletePlayList');
+    Route::post('playlist/changefeatured', 'Panel\PlaylistController@ChangeFeatured')->name('Panel.ChangeFeatured');
+
+
 
     Route::get('albums', 'Panel\AlbumController@List')->name('Panel.Album');
     Route::get('album/add', 'Panel\AlbumController@Add')->name('Panel.AddAlbum');
@@ -70,6 +74,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::get('gallery/{post}', 'Panel\GalleryController@Edit')->name('Panel.EditGallery');
     Route::post('gallery/{post}', 'Panel\GalleryController@EditGallery')->name('Panel.EditGallery');
     Route::delete('gallery', 'Panel\GalleryController@DeleteGallery')->name('Panel.DeleteGallery');
+    Route::delete('delete/image', 'Panel\AjaxController@DeleteImage')->name('Panel.DeleteImage');
+
 
 
     Route::delete('post/delete', 'Panel\MusicController@DeletePost')->name('Panel.DeletePost');
@@ -95,12 +101,16 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
 
 Route::group([], function () {
     Route::get('/', 'Front\MainController@index')->name('MainUrl');
-    Route::get('videos/{slug}', 'Front\MovieController@Show')->name('ShowVideo');
     Route::get('musics/{slug}', 'Front\MusicController@Show')->name('ShowMusic');
     Route::get('podcasts/{slug}', 'Front\MusicController@Show')->name('ShowPodcast');
 
     Route::get('/testapi', 'Panel\ImdbController@testApi')->name('Test.Api');
     Route::get('/mp3s', 'Front\MusicController@All')->name('Mp3s');
+    Route::get('/musicvideos', 'Front\VideoController@All')->name('Videos');
+    Route::get('/musicvideo/{slug}', 'Front\VideoController@Show')->name('ShowVideo');
+    Route::get('/play/playlist/{id}', 'Front\PlayListController@play')->name('Play.Playlist');
+    Route::get('/playlists/list', 'Front\PlayListController@All')->name('Playlists');
+
     Route::get('/series', 'Front\SerieController@All')->name('AllSeries');
     Route::get('/childs', 'Front\ChildController@Show')->name('Childrens');
     Route::get('/categories', 'Front\CategoryController@All')->name('Categories');
@@ -115,9 +125,13 @@ Route::group([], function () {
     Route::get('/play/{slug}', 'Front\MainController@Play')->name('S.Play');
     Route::get('/play/{slug}/{season}/{section}', 'Front\MainController@Play')->name('S.Series.Play');
 
+    Route::get('photos', 'Front\GalleryController@All')->name('Photos');
+
+
     Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
     Route::post('ajax/search', 'Front\AjaxController@Search')->name('S.Search');
     Route::post('ajax/favorite', 'Front\AjaxController@addToFavorite')->name('S.addToFavorite');
+    Route::post('ajax/getplaylists', 'Front\AjaxController@getPlaylists')->name('Ajax.GetPlayLists');
+    Route::post('ajax/newplaylist', 'Front\AjaxController@newPlaylist')->name('Ajax.NewPlaylist');
+    Route::post('ajax/addtoplaylist', 'Front\AjaxController@addToPlaylist')->name('Ajax.AddToPlaylist');
 });
-
-

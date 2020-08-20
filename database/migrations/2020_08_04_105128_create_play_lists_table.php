@@ -19,6 +19,7 @@ class CreatePlayListsTable extends Migration
             $table->string('image')->nullable();
             $table->text('information')->nullable();
             $table->enum('type',['music','podcast','video'])->nullable();
+            $table->boolean('featured')->default(false);
             $table->timestamps();
         });
     }

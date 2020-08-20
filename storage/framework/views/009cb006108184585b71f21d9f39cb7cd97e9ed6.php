@@ -43,7 +43,7 @@
                     </td>
                     <td class="text-success"><?php echo e($post->duration); ?></td>
                     <td>
-                        <img src="<?php echo e(asset($post->poster)); ?>" alt="" width="100px">
+                        <img src="<?php echo e(asset($post->poster[1])); ?>" alt="" width="100px">
                     </td>
                     <td>
                         <a href="<?php echo e(route('Panel.EditMusic',$post)); ?>" class="btn btn-sm btn-info">ویرایش</a>

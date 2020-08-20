@@ -14,7 +14,10 @@
                             Videos
                             <?php endif; ?>
                         </a></li>
-                  
+                        <?php if(isset($playlist)): ?>
+                        <li><a href="#"><?php echo e($playlist->name); ?></a></li>
+                        <?php endif; ?>
+                            
                     <li class="current"><a href="#"><?php echo e($post->title); ?></a></li>
                 </ul>
             </div>

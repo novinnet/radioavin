@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use App\Discount as AppDiscount;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\UserPlaylist;
 use Illuminate\Database\Eloquent\Collection;
+use UplaylistTrack;
 
 class AjaxController extends Controller
 {
@@ -50,16 +52,16 @@ class AjaxController extends Controller
     }
 
 
-   public function addToFavorite(Request $request)
+    public function addToFavorite(Request $request)
     {
         // dd($request->all());
 
         if (auth()->check()) {
             $user = auth()->user();
-        }else{
-            return response()->json(['auth'=>false , 'login'=>route('login')], 200);
+        } else {
+            return response()->json(['auth' => false, 'login' => route('login')], 200);
         }
-        
+
 
 
         $obj = DB::table('user_favorite')->where(['user_id' => $user->id, 'post_id' => $request->post_id])->first();
@@ -71,6 +73,86 @@ class AjaxController extends Controller
             return response()->json('attach', 200);
         }
     }
+
+    public function getPlaylists(Request $request)
+    {
+
+
+
+        if (!auth()->check()) {
+            return 'You must  <a href="' . route('login') . '" class="text-gray">login </a> to add to playlist.';
+        }
+        $track = $request->id;
+        $user_id = auth()->user()->id;
+        $request->session()->put("track_id", $request->id);
+        $user_playlists = auth()->user()->playlists->where('type', $request->type);
+       
+        $url = route('Ajax.NewPlaylist');
+
+
+        $list  = '<div class="pl-wrapper">';
+
+
+        foreach ($user_playlists as $key => $playlist) {
+            if($playlist->tracks->contains($track)){
+                $icon = '<i class="fa fa-minus"></i>';
+            }else{
+                $icon = '<i class="fa fa-plus"></i>';
+
+            }
+            $list .= ' <div class="pl-item"><a href="'.$playlist->playurl().'" class="user-playlist">' . $playlist->name . ' ('.count($playlist->tracks).') </a>
+        <div>
+            <a href="#" data-id="' . $playlist->id . '" data-url="' . $playlist->addurl() . '" onclick="addToPlaylist(this)"class="add"> '.$icon.' </a>
+            <a href="#" onclick=""> <i class="fa fa-edit"></i> </a>
+        </div>
+        </div>';
+        }
+
+        $list .= '
+       </div>
+       <hr/>
+       <a  href="#" class="newplaylist" data-type="' . $request->type . '" onclick="showForm(event)">New Playlist</a>
+       ';
+        return $list;
+    }
+
+    public function newPlaylist(Request $request)
+    {
+
+
+        $playlist = UserPlaylist::create([
+            'user_id' => auth()->user()->id,
+            'name' => $request->name,
+            'type' => $request->type
+        ]);
+        return response()->json([
+            'name' => $playlist->name,
+            'id' => $playlist->id,
+            'playurl' => $playlist->playurl(),
+            'addurl' => $playlist->addurl()
+
+        ], 200);
+    }
+
+    public function addToPlaylist(Request $request)
+    {
+
+
+        $track = $request->session()->get('track_id');
+
+
+        $playlist = UserPlaylist::find($request->playlist_id);
+        if ($playlist->tracks->contains($track)) {
+            $playlist->tracks()->detach($track);
+            $status = 'detach';
+        } else {
+            $playlist->tracks()->attach($track);
+             $status = 'attach';
+        }
+
+        return response()->json($status, 200);
+    }
+
 
     public function checkTakhfif(Request $request)
     {

@@ -1,7 +1,7 @@
 <div class="col-md-4">
     
-    
-    
+
+
     <div class="row">
         <div class="form-group col-md-12">
             <label for=""> Singer: </label>
@@ -15,5 +15,11 @@
         </div>
     </div>
 
-     
-   <?php /**PATH C:\xampp\htdocs\radio\resources\views/Includes/Panel/VideoSideForm.blade.php ENDPATH**/ ?>
+    <div class="row">
+        <div class="form-group col-md-12">
+            <div class="custom-control custom-checkbox custom-control-inline ">
+                <input type="checkbox" id="featured" name="featured" value="1" class="custom-control-input " <?php if(isset($post)): ?> <?php endif; ?>>
+                <label class="custom-control-label" for="featured">Featured</label>
+            </div>
+        </div>
+    </div><?php /**PATH C:\xampp\htdocs\radio\resources\views/Includes/Panel/VideoSideForm.blade.php ENDPATH**/ ?>

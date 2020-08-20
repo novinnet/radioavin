@@ -12,6 +12,7 @@ class Post extends Model
    
     protected $casts = [
         'awards' => 'array',
+        'poster' => 'array',
     ];
 
     
@@ -103,12 +104,32 @@ class Post extends Model
 
     public function relatedPosts()
     {
+
        $cats =  $this->categories()->pluck('name');
-        
-      return $posts = Post::whereHas('categories',function($q)use($cats){
-           $q->whereIn('name',$cats);
-       })->get();
+       $type = $this->type;
+       $id = $this->id;
+       if(count($cats)) {
+           return $posts = static::whereHas('categories',function($q)use($cats){
+                $q->whereIn('name',$cats);
+            })->where('type',$type)->where('id','!=',$id)->get();
+       }else{
+          return $posts =  static::whereHas('artists',function($q){
+                $q->where('fullname',$this->singers());
+            })->where('type',$type)->where('id','!=',$id)->get();
+       }
        
+    }
+    public function getReleasedAttribute($value)
+    {
+        return \Carbon\Carbon::parse($this->value)->format('Y/m/d');
+    }
+
+    public function image131()
+    {
+         $poster = $this->poster;
+         if($poster) {
+
+         }
     }
 
     

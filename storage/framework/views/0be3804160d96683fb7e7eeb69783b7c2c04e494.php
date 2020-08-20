@@ -18,12 +18,15 @@
     <?php if(count($category->posts)): ?>
     <div class="row">
         <?php $__currentLoopData = $category->posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php
+            
+        ?>
         <div class="col-6 col-md-2">
             <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-3">
             <a href="<?php echo e($post->url()); ?>">
                     <div class="music-cart">
                         <?php if(isset($post->poster)): ?>
-                        <img src="<?php echo e(asset($post->poster)); ?>" />
+                        <img src="<?php echo e(asset(unserialize($post->poster)['resize']) ?? ''); ?>" />
                         <?php else: ?>
                         <img src="<?php echo e(asset('frontend/images/newreleases.jpg')); ?>" />
                         <?php endif; ?>

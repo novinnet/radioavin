@@ -19,6 +19,7 @@
                     <th> Name </th>
                     <th>Songs</th>
                     <th>Created At</th>
+                    <th>Poster</th>
                     <th></th>
                 </tr>
             </thead>
@@ -36,7 +37,19 @@
                         {{\Carbon\Carbon::parse($playlist->created_at)->format('d F Y')}}
                     </td>
                     <td>
+                        <img src="{{asset($playlist->image[1])}}" alt="" width="100px">
+                    </td>
+                    <td class="text-center"> 
                         <a href="{{route('Panel.EditPlayList',$playlist)}}" class="btn btn-sm btn-info">Edit</a>
+                        <a href="#" data-id="{{$playlist->id}}" title="حذف " data-toggle="modal" data-target="#deletePlaylist"
+                            class="btn btn-sm btn-danger   m-2">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                         <a href="#"  title="حذف "
+                         onclick="changeFeaturedPlaylist(event,'{{$playlist->id}}','{{route('Panel.ChangeFeatured')}}')"
+                            class="btn btn-sm btn-danger   m-2">
+                           Featured
+                        </a>
                     </td>
                     @endforeach
             </tbody>
@@ -51,10 +64,11 @@
 
 @section('js')
 <script>
-    $('.deleteposts').click(function(e){
-            e.preventDefault()
-           
-        });
+  $('#deletePlaylist').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('id')
+            $('#id').val(recipient)
+
     })
 </script>
 
