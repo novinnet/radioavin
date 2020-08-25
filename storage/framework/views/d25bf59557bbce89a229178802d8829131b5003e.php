@@ -1,5 +1,5 @@
 <?php $__env->startSection('main'); ?>
-<?php echo $__env->make('Includes.Front.TopSlider', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'music'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <?php echo $__env->make('Includes.Front.Alfabet', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
@@ -28,7 +28,19 @@
             </div>
 
             <div class="row panel2" id="panel2-2" style="display: none">
-                
+                <?php if(count($featured)): ?>
+                <?php $__currentLoopData = $featured; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__env->startComponent('components.music-box',['item' => $item]); ?>
+                <?php echo $__env->renderComponent(); ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php if(count($featured) > 23): ?>
+                <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
+                    <a class="text-center" href="#">
+                        <span class="view-event-sp music-cart-wrapper">View More</span>
+                    </a>
+                </div>
+                <?php endif; ?>
+                <?php endif; ?>
 
             </div>
 
@@ -85,8 +97,8 @@
     </div>
 </div>
 
+<?php if(count($albums)): ?>
 <div class="container mt-5 mb-5">
-
     <div class="row  justify-content-between">
         <div class="col">
             <div class="sectionTitle">
@@ -94,15 +106,16 @@
             </div>
         </div>
         <div class="col text-right">
-
         </div>
     </div>
     <div class="row">
-        <?php $__env->startComponent('components.album-box'); ?>
+        <?php $__currentLoopData = $albums; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $album): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__env->startComponent('components.album-box',['album'=>$album]); ?>
         <?php echo $__env->renderComponent(); ?>
-
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 </div>
+<?php endif; ?>
 
 
 <?php $__env->stopSection(); ?>

@@ -1,5 +1,5 @@
 @isset($post)
-    <div class="mt-page">
+<div class="mt-page">
     <div id="breadcrumbs_container" class="container">
         <div class="row">
             <div class="col">
@@ -14,10 +14,12 @@
                             Videos
                             @endif
                         </a></li>
-                        @isset($playlist)
-                        <li><a href="#">{{$playlist->name}}</a></li>
-                        @endisset
-                            
+                    @isset($playlist)
+                    <li><a href="#">{{$playlist->name}}</a></li>
+                    @endisset
+                    @isset($album)
+                    <li><a href="#">{{$album->name}}</a></li>
+                    @endisset
                     <li class="current"><a href="#">{{$post->title}}</a></li>
                 </ul>
             </div>

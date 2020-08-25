@@ -25,7 +25,7 @@
 <?php else: ?>
 <div class="form-group col-md-6">
     <label for=""> Upload File: </label>
-    <input  type="file" name="file" id="" class="form-control" />
+    <input  type="file" name="file" id="" class="form-control" required/>
 </div>
 
 <?php endif; ?><?php /**PATH C:\xampp\htdocs\radio\resources\views/Includes/Panel/Music.blade.php ENDPATH**/ ?>

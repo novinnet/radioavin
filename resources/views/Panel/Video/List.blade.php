@@ -44,7 +44,7 @@
                     <td class="text-success">{{$post->duration}}</td>
                    
                     <td>
-                    <img src="{{asset($post->poster[1])}}" alt="" width="100px">
+                         <img src="{{asset(unserialize($post->poster)['resize'])}}" style="width: 70px" />
                     </td>
                     <td>
                         <a href="{{route('Panel.EditVideo',$post)}}" class="btn btn-sm btn-info">ویرایش</a>

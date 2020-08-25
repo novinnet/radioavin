@@ -37,12 +37,12 @@
                    
                     <td>{{$key+1}}</td>
                     <td>
-                        <a href="#" class="text-primary">{{$gallery->name}}</a>
+                        <a href="#" class="text-primary">{{$gallery->title}}</a>
                     </td>
                     <td>{{$gallery->images->count()}}</td>
                    
                     <td>
-                 {{$gallery->created_at->format('d M')}}
+                 {{$gallery->created_at}}
                     </td>
                     <td>
                         <a href="{{route('Panel.EditGallery',$gallery)}}" class="btn btn-sm btn-info">ویرایش</a>

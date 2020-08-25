@@ -2,7 +2,7 @@
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-1">
         <a href="<?php echo e($item->url()); ?>">
             <div class="music-cart">
-                <img src="<?php echo e(asset($item->poster[1])); ?>" class="size-131" />
+                <img src="<?php echo e(asset(unserialize($item->poster)['resize'])); ?>" class="size-131" />
                 <div class="img-cover"></div>
 
             </div>
@@ -13,5 +13,5 @@
             </div>
         </a>
     </div>
-<a href="#" onclick="call(event)" data-id="<?php echo e($item->id); ?>" data-type="music" class='add-to-pl' id="<?php echo e($item->id); ?>"> + </a>
+<a href="#" onclick="call(event)" data-id="<?php echo e($item->id); ?>" data-type="music" class='add-to-pl plus-button' id="<?php echo e($item->id); ?>"> + </a>
 </div><?php /**PATH C:\xampp\htdocs\radio\resources\views/components/music-box.blade.php ENDPATH**/ ?>

@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class VideoController extends Controller
 {
@@ -39,9 +40,9 @@ class VideoController extends Controller
     public function Save(Request $request)
     {
 
-        // dd($request->all());
+        
 
-        $slug = Str::slug($request->title);
+        $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
 
         $destinationPath = "videos/$slug";
         if (!File::exists($destinationPath)) {
@@ -60,9 +61,9 @@ class VideoController extends Controller
         $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
         $poster186 =  $this->image_resize(186, 139, $Poster, $destinationPath);
         $banner =    $this->image_resize(440, 212, $Poster, $destinationPath);
-      
+        File::delete(public_path() . '/' . $Poster);
         $post->released = Carbon::parse($request->released)->toDateTimeString();
-        $post->poster = serialize(['org' => $Poster, 'resize' => $poster186, 'banner' => $banner]);
+        $post->poster = serialize(['resize' => $poster186, 'banner' => $banner]);
         $post->duration = $this->get_duration($request->file[1][1]);
         if ($post->save()) {
 
@@ -124,15 +125,6 @@ class VideoController extends Controller
 
         return Redirect::route('Panel.VideoList');
     }
-
-
-
-
-
-
-
-
-
 
     public function DeleteCaption(Request $request)
     {

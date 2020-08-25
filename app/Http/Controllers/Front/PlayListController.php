@@ -26,7 +26,7 @@ class PlayListController extends Controller
         if (request()->type) {
             if (request()->type == 'c') {
                 $playlist = Playlist::find($id);
-                $all = $playlist->posts;
+                $all = $playlist->tracks;
             } elseif (request()->type == 'u') {
                 $playlist = UserPlaylist::find($id);
                 $all = $playlist->tracks;
@@ -51,7 +51,7 @@ class PlayListController extends Controller
                 'id' => $item->id,
                 'name' => $item->title,
                 'artist' => $item->singers(),
-                'image' => asset($item->poster[3]),
+                'image' => asset(unserialize($item->poster)['resize']),
                 'path' => asset($item->files->first()->url),
                 'lyric' => $item->description
             ];
@@ -62,7 +62,7 @@ class PlayListController extends Controller
         $data['track_lists'] = json_encode($array);
 
         return view(
-            'Front.show',
+            'Front.show-music',
             $data
         );
     }

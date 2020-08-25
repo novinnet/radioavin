@@ -612,7 +612,7 @@ $(".dropify").dropify(dropifyOptions);
 
 
 
-function deletePlaylist(event,id, url) {
+function deleteCategory(event,id, url) {
     event.preventDefault()
     var token = $('meta[name="_token"]').attr("content");
 

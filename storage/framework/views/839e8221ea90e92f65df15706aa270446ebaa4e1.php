@@ -29,7 +29,7 @@
                         <a href="#" class="text-primary"><?php echo e($playlist->name); ?></a>
                     </td>
                     <td>
-                        <?php echo e(count($playlist->posts)); ?>
+                        <?php echo e(count($playlist->tracks)); ?>
 
                     </td>
                     <td>

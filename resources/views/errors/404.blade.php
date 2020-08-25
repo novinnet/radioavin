@@ -31,8 +31,10 @@
     }
 
     .title{
-        text-align: center;
-        color: white;
+      text-align: center;
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 1rem;
     }
 
     .button{
@@ -96,11 +98,11 @@
                 </g>
             </svg>
         </div>
-        <div class="title">صفحه ی مورد نظر شما یافت نشد.</div>
-        <div class="title">برای دیدن هزاران فیلم و سریال، به صفحه اصلی نماوا بروید.</div>
+        <div class="title">Page Not Found</div>
+        <div class="title"></div>
         <div class="title">
         <a href="{{route('MainUrl')}}" class="button ">
-            صفحه اصلی 
+            Home Page
         </a>
         </div>
     </div>

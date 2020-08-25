@@ -1,5 +1,5 @@
 <?php if(isset($post)): ?>
-    <div class="mt-page">
+<div class="mt-page">
     <div id="breadcrumbs_container" class="container">
         <div class="row">
             <div class="col">
@@ -14,10 +14,12 @@
                             Videos
                             <?php endif; ?>
                         </a></li>
-                        <?php if(isset($playlist)): ?>
-                        <li><a href="#"><?php echo e($playlist->name); ?></a></li>
-                        <?php endif; ?>
-                            
+                    <?php if(isset($playlist)): ?>
+                    <li><a href="#"><?php echo e($playlist->name); ?></a></li>
+                    <?php endif; ?>
+                    <?php if(isset($album)): ?>
+                    <li><a href="#"><?php echo e($album->name); ?></a></li>
+                    <?php endif; ?>
                     <li class="current"><a href="#"><?php echo e($post->title); ?></a></li>
                 </ul>
             </div>

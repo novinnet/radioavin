@@ -13,5 +13,5 @@
             </div>
         </a>
     </div>
-<a href="#" onclick="call(event)" data-id="{{$item->id}}" data-type="music" class='add-to-pl' id="{{$item->id}}"> + </a>
+<a href="#" onclick="call(event)" data-id="{{$item->id}}" data-type="music" class='add-to-pl plus-button' id="{{$item->id}}"> + </a>
 </div>

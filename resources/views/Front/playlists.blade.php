@@ -50,7 +50,7 @@
 </div>
 @endif
 
-@if (count($my_playlists))
+@if (isset($my_playlists) && count($my_playlists))
 <div class="container">
 
     <div class="row  justify-content-between">
@@ -63,10 +63,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-6 col-md-2">
+       @foreach ($my_playlists as $item)
+            <div class="col-6 col-md-2">
             @component('components.playlist-item',['playlist'=>$item,'songs'=>count($item->tracks)])
             @endcomponent
         </div>
+       @endforeach
     </div>
 </div>
 @endif

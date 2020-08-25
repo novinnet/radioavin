@@ -24,6 +24,7 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
+        "lightbox2": "^2.11.3",
         "videojs-resolution-switcher": "^0.4.2"
     }
 }

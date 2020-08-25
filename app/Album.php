@@ -2,14 +2,31 @@
 
 namespace App;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
 {
-
+    use Sluggable;
 
     protected $guarded = ['id'];
+    protected $with = 'posts';
     public $timestamps = false;
+
+    
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
    public static function check($name)
    {
@@ -19,6 +36,10 @@ class Album extends Model
            return null;
        }
    }
+    public function playurl()
+    {
+        return route('Play.Album',['slug'=>$this->slug]);
+    }
 
      public function posts()
     {

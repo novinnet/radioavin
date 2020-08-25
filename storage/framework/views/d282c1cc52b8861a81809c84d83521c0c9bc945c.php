@@ -1,5 +1,5 @@
 <?php $__env->startSection('main'); ?>
-<?php echo $__env->make('Includes.Front.TopSlider', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('Includes.Front.TopSlider',['sliders'=>$sliders,'type'=>'video'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php echo $__env->make('Includes.Front.Alfabet', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php if(count($trending)): ?>
 <div class="container mt-page ">

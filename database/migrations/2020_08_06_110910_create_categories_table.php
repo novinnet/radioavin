@@ -20,9 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->timestamps();
         });
 
-        DB::table('categories')->insert([
-            'name' => 'featured songs'
-        ]);
+      
     }
 
     /**

@@ -11,13 +11,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class AlbumController extends Controller
 {
-     public function List()
+    public function List()
     {
         $albums = Album::latest()->get();
-        
+
         return view('Panel.Album.List', ['albums' => $albums]);
     }
 
@@ -30,25 +31,23 @@ class AlbumController extends Controller
     public function Save(Request $request)
     {
 
-     
 
-        $slug = Str::slug($request->name);
+        $slug = SlugService::createSlug(Post::class, 'slug', $request->name);
+        $destinationPath = 'album_images';
         if (request()->hasFile('poster')) {
-            $destinationPath = 'album';
-            $picextension = request()->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            request()->file('poster')->move($destinationPath, $fileName);
-            $poster = "$destinationPath/$fileName";
+            $poster = $this->SavePoster($request->file('poster'), $slug, $destinationPath);
+            $resize = $this->image_resize(179, 179, $poster, $destinationPath);
+            File::delete(public_path() . '/' . $poster);
         } else {
-            $poster = '';
+            $resize = '';
         }
         $album = new Album();
         $album->name = $request->name;
         $album->information = $request->information;
-        $album->image = $poster;
+        $album->image = $resize;
         $album->save();
 
-        if(isset($request->songs)){
+        if (isset($request->songs)) {
             foreach ($request->songs as $key => $song) {
                 $album->posts()->attach($song);
             }

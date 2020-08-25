@@ -40,7 +40,7 @@
                     <td><?php echo e($gallery->images->count()); ?></td>
                    
                     <td>
-                 <?php echo e($gallery->created_at->format('d M')); ?>
+                 <?php echo e($gallery->created_at); ?>
 
                     </td>
                     <td>

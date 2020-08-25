@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class GalleryController extends Controller
 {
@@ -26,8 +27,9 @@ class GalleryController extends Controller
     {
 
         $gallery = new Gallery();
-        $gallery->name = $request->title;
-        $destinationPath = 'gallery/' . $request->title;
+        $gallery->title = $request->title;
+        $slug = SlugService::createSlug(Gallery::class, 'slug',$request->title);
+        $destinationPath = 'gallery/' .  $slug;
         $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
         $banner =    $this->image_resize(450,450,$Poster,$destinationPath);
 
@@ -48,9 +50,8 @@ class GalleryController extends Controller
 
     public function DeleteGallery(Request $request)
     {
-
         $gallery = Gallery::find($request->gallery_id);
-        File::deleteDirectory(public_path("gallery/$gallery->title/"));
+        File::deleteDirectory(public_path("gallery/$gallery->slug/"));
         $gallery->images()->delete();
         $gallery->delete();
         toastr()->success('گالری با موفقیت حذف شد');

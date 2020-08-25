@@ -14,7 +14,15 @@ class GalleryController extends Controller
         $data['sliders'] = Gallery::latest()->take(10)->get();
         $data['galleries'] = Gallery::with('images')->latest()->get();
 
-        return view('Front.photos',$data);
+        return view('Front.photogalleries',$data);
+
+    }
+    public function Show($slug)
+    {
+        
+         $data['title'] = 'Radio Avin | '.$slug.'';
+         $data['gallery'] = Gallery::whereSlug($slug)->with('images')->first();
+         return view('Front.show-gallery',$data);
 
     }
 }

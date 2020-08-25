@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Album;
 use App\Post;
 use App\Slider;
 use Carbon\Carbon;
@@ -34,7 +35,7 @@ class MusicController extends Controller
                 'id' => $item->id,
                 'name' => $item->title,
                 'artist' => $item->singers(),
-                'image' => asset($item->poster[3]),
+                'image' => asset(unserialize($item->poster)['resize']),
                 'path' => asset($item->files->first()->url),
                 'lyric' => $item->description
             ];
@@ -55,10 +56,9 @@ class MusicController extends Controller
 
        
         $sliders = Post::where('type', 'music')->latest()->take(10)->get();
-        $trending = Post::where('type', 'music')->orderBy('views', 'DESC')->get();
-        $featured = Post::whereHas('categories', function ($q) {
-            $q->where('name', 'featured songs');
-        })->get();
+        $trending = Post::where('type', 'music')->where('featured',0)->orderBy('views', 'DESC')->get();
+        $featured = Post::where('type', 'music')->where('featured',1)->orderBy('views', 'DESC')->get();
+        
 
         $data['this_week'] = Post::where('type', 'music')->
         whereDate('created_at', '>', Carbon::now()->subWeeks(1)->toDateString())
@@ -69,7 +69,7 @@ class MusicController extends Controller
         $data['all_time'] = Post::where('type', 'music')
         ->orderBy('views', 'DESC')->take(8)->get();
 
-
+        $data['albums'] = Album::has('posts')->latest()->get();
         $data['sliders'] = $sliders;
         $data['trending'] = $trending;
         $data['featured'] = $featured;

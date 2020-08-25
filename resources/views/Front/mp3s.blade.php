@@ -30,19 +30,19 @@
             </div>
 
             <div class="row panel2" id="panel2-2" style="display: none">
-                {{-- @if (count($trending))
-                @foreach ($trending as $item)
-                @component('components.music-box')
+                @if (count($featured))
+                @foreach ($featured as $item)
+                @component('components.music-box',['item' => $item])
                 @endcomponent
                 @endforeach
-                @if (count($trending) > 23)
+                @if (count($featured) > 23)
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
                     <a class="text-center" href="#">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>
                 @endif
-                @endif --}}
+                @endif
 
             </div>
 
@@ -99,8 +99,8 @@
     </div>
 </div>
 
+@if (count($albums))
 <div class="container mt-5 mb-5">
-
     <div class="row  justify-content-between">
         <div class="col">
             <div class="sectionTitle">
@@ -108,15 +108,16 @@
             </div>
         </div>
         <div class="col text-right">
-
         </div>
     </div>
     <div class="row">
-        @component('components.album-box')
+        @foreach ($albums as $album)
+            @component('components.album-box',['album'=>$album])
         @endcomponent
-
+        @endforeach
     </div>
 </div>
+@endif
 
 
 @endsection

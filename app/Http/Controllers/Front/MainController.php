@@ -20,6 +20,7 @@ class MainController extends Controller
         $categories = Category::all();
         $playlists = PlayList::latest()->take(10)->get();
         $artists = Artist::where('role','singer')->latest()->get();
+        $data['banners'] = Post::latest()->take(2)->get();
         $data['categories'] = $categories;
         $data['playlists'] = $playlists;
           $data['artists'] = $artists;

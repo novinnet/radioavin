@@ -49,7 +49,7 @@
 </div>
 <?php endif; ?>
 
-<?php if(count($my_playlists)): ?>
+<?php if(isset($my_playlists) && count($my_playlists)): ?>
 <div class="container">
 
     <div class="row  justify-content-between">
@@ -62,10 +62,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-6 col-md-2">
+       <?php $__currentLoopData = $my_playlists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="col-6 col-md-2">
             <?php $__env->startComponent('components.playlist-item',['playlist'=>$item,'songs'=>count($item->tracks)]); ?>
             <?php echo $__env->renderComponent(); ?>
         </div>
+       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 </div>
 <?php endif; ?>

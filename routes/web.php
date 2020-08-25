@@ -126,7 +126,10 @@ Route::group([], function () {
     Route::get('/play/{slug}/{season}/{section}', 'Front\MainController@Play')->name('S.Series.Play');
 
     Route::get('photos', 'Front\GalleryController@All')->name('Photos');
+    Route::get('photos/{slug}', 'Front\GalleryController@Show')->name('ShowGallery');
 
+
+    Route::get('album/{slug}', 'Front\AlbumController@Play')->name('Play.Album');
 
     Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
     Route::post('ajax/search', 'Front\AjaxController@Search')->name('S.Search');

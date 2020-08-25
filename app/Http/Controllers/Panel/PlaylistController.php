@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class PlaylistController extends Controller
 {
+    public $destinationPath = "playlist_images";
     public function List()
     {
         $playlists = PlayList::latest()->get();
@@ -30,26 +31,25 @@ class PlaylistController extends Controller
 
 
         $slug = Str::slug($request->name);
-        $destinationPath = 'playlist';
+
         if (request()->hasFile('poster')) {
-            $picextension = request()->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            request()->file('poster')->move($destinationPath, $fileName);
-            $poster = "$destinationPath/$fileName";
+            $poster = $this->SavePoster($request->file('poster'), $slug, $this->destinationPath);
+            $resize = $this->image_resize(179, 179, $poster, $this->destinationPath);
+            File::delete(public_path() . '/' . $poster);
         } else {
-            $poster = '';
+            $resize = '';
         }
-        $poster179 =  $this->image_resize(179, 179, $poster, $destinationPath);
+
 
         $playlist = new PlayList();
         $playlist->name = $request->name;
         $playlist->information = $request->information;
-        $playlist->image = [$poster, $poster179];
+        $playlist->image = $resize;
         $playlist->save();
 
         if (isset($request->songs)) {
             foreach ($request->songs as $key => $song) {
-                $playlist->posts()->attach($song);
+                $playlist->tracks()->attach($song);
             }
         }
 
@@ -63,16 +63,16 @@ class PlaylistController extends Controller
         return view('Panel.PlayList.Add', compact(['playlist']));
     }
 
-    public function EditSave(Request $request, Artist $playlist)
+    public function EditSave(Request $request, PlayList $playlist)
     {
-        $destinationPath = 'playlist';
+
         $slug = Str::slug($request->name);
 
         if ($request->hasFile('poster')) {
             File::delete(public_path() . $playlist->poster);
 
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0777, true);
+            if (!File::exists($this->destinationPath)) {
+                File::makeDirectory($this->destinationPath, 0777, true);
             }
             $picextension = $request->file('poster')->getClientOriginalExtension();
             $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
@@ -99,11 +99,9 @@ class PlaylistController extends Controller
 
 
         $playlist = PlayList::find($request->id);
-        File::delete(public_path() . $playlist->poster);
-        foreach ($playlist->image as $key => $image) {
-            File::delete(public_path() . $image);
-        }
-        $playlist->posts()->detach();
+        File::deleteDirectory(public_path("$playlist->image/"));
+
+        $playlist->tracks()->detach();
 
         $playlist->delete();
 
@@ -111,26 +109,23 @@ class PlaylistController extends Controller
         return back();
     }
 
-     public function ChangeFeatured(Request $request)
+    public function ChangeFeatured(Request $request)
     {
 
 
         $playlist = PlayList::find($request->playlist_id);
-        if($playlist->featured == 1){
-        $playlist->featured = 0;
-    } else {
-        $playlist->featured = 1;
-    }
-    $playlist->save();
+        if ($playlist->featured == 1) {
+            $playlist->featured = 0;
+        } else {
+            $playlist->featured = 1;
+        }
+        $playlist->save();
 
-    return response()->json([
-      'data' => $playlist->featured
-      
-    ]);
+        return response()->json([
+            'data' => $playlist->featured
+
+        ]);
         toastr()->success('پلی لیست با موفقیت حذف شد');
         return back();
     }
-    
-
-
 }

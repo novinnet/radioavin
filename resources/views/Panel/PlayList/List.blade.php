@@ -31,7 +31,7 @@
                         <a href="#" class="text-primary">{{$playlist->name}}</a>
                     </td>
                     <td>
-                        {{count($playlist->posts)}}
+                        {{count($playlist->tracks)}}
                     </td>
                     <td>
                         {{\Carbon\Carbon::parse($playlist->created_at)->format('d F Y')}}

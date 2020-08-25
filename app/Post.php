@@ -121,7 +121,7 @@ class Post extends Model
     }
     public function getReleasedAttribute($value)
     {
-        return \Carbon\Carbon::parse($this->value)->format('Y/m/d');
+        return \Carbon\Carbon::parse($value)->format('Y/m/d');
     }
 
     public function image131()

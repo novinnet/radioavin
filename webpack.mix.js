@@ -12,15 +12,9 @@ const mix = require('laravel-mix');
  */
 
 mix.scripts(
-    [
-        "node_modules/video.js/dist/video.min.js",
-        "node_modules/videojs-resolution-switcher/lib/videojs-resolution-switcher.js"
-    ],
-    "public/frontend/assets/js/videojs.js"
+    ["node_modules/lightbox2/dist/js/lightbox.min.js"],
+    "public/frontend/assets/js/lightbox.js"
 ).styles(
-    [
-        "node_modules/video.js/dist/video-js.min.css",
-        "node_modules/videojs-resolution-switcher/lib/videojs-resolution-switcher.css"
-    ],
-    "public/frontend/assets/css/videojs.css"
+    ["node_modules/lightbox2/dist/css/lightbox.min.css"],
+    "public/frontend/assets/css/lightbox.css"
 );

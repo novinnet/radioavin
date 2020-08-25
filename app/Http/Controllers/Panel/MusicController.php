@@ -13,7 +13,7 @@ use App\PlayList;
 use Carbon\Carbon;
 use App\File as Fil;
 use Illuminate\Support\Str;
-
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -47,7 +47,7 @@ class MusicController extends Controller
         // dd($request->all());
         
 
-        $slug = Str::slug($request->title);
+        $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
 
         $destinationPath = "music/$slug";
 
@@ -68,9 +68,10 @@ class MusicController extends Controller
         $Poster = $this->SavePoster($request->file('poster'),'poster-', $destinationPath);
         $poster161 =  $this->image_resize(161,161,$Poster,$destinationPath);
         $banner =    $this->image_resize(440,212,$Poster,$destinationPath);
-       
+        File::delete(public_path() . '/' . $Poster);
         $post->released = Carbon::parse($request->released)->toDateTimeString();
-        $post->poster = serialize(['org' => $Poster, 'resize' => $poster161, 'banner' => $banner]);
+
+        $post->poster = serialize(['resize' => $poster161, 'banner' => $banner]);
        
         $post->duration = $this->get_duration($request->file('file'));
         if ($post->save()) {
