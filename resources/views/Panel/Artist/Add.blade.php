@@ -2,7 +2,7 @@
 
 @section('content')
 @if (!isset($artist))
-    @include('Includes.Panel.artistmenu')
+@include('Includes.Panel.artistmenu')
 @endif
 
 <div class="container-fluid">
@@ -26,8 +26,12 @@
                             <div class="form-group col-md-6">
                                 <label for=""> Role : </label>
                                 <select name="role" id="role" class="form-control custom-control">
-                                    <option value="Singer">Singer</option>
-                                    <option value="Writer">Writer</option>
+                                    <option value="Singer"
+                                        {{isset($artist) && $artist->role == 'singer' ? 'selected' : ''}}>Singer
+                                    </option>
+                                    <option value="Writer"
+                                        {{isset($artist) && $artist->role == 'writer' ? 'selected' : ''}}>Writer
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -39,9 +43,9 @@
                                     </div>
                                     <div class="col-md-9">
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($artist)
-                                             {{asset($artist->photo)}} 
+                                             {{asset(unserialize($artist->photo)['resize'])}} 
                                                 @else
-                                                 {{asset('assets/images/images.png')}} 
+                                                 {{asset('assets/images/image-placeholder.jpg')}} 
                                             @endisset">
                                         <input type="file" name="poster" id="poster" />
                                     </div>
@@ -59,8 +63,18 @@
                             <div class="form-group col-md-6">
                                 <label for="">BirthDay: </label>
                                 <input type="text" class="form-control  datepicker" name="birthday" id="birthday"
-                                    @isset($artist) value="{{\Carbon\Carbon::parse($artist->birthday)->format('d F Y')}}"
-                                    @endisset>
+                                    @isset($artist)
+                                    value="{{\Carbon\Carbon::parse($artist->birthday)->format('d F Y')}}" @endisset>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <div class="custom-control custom-checkbox custom-control-inline ">
+                                    <input type="checkbox" id="popular" name="popular" value="1"
+                                        class="custom-control-input " @if(isset($artist) && $artist->popular == 1) checked @endif>
+                                    <label class="custom-control-label" for="popular">Add To Popular Artists</label>
+                                </div>
                             </div>
                         </div>
                     </div>

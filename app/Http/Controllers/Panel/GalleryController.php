@@ -26,9 +26,9 @@ class GalleryController extends Controller
     public function Save(Request $request)
     {
 
+        $slug = SlugService::createSlug(Gallery::class, 'slug',$request->title);
         $gallery = new Gallery();
         $gallery->title = $request->title;
-        $slug = SlugService::createSlug(Gallery::class, 'slug',$request->title);
         $destinationPath = 'gallery/' .  $slug;
         $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
         $banner =    $this->image_resize(450,450,$Poster,$destinationPath);

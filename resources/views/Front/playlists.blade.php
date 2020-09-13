@@ -2,7 +2,8 @@
 @section('title',$title)
 
 @section('main')
-@if (count($featured))
+<div class="playlist-container">
+    @if (count($featured))
 <div class="container mt-page ">
 
     <div class="row  justify-content-between">
@@ -72,5 +73,6 @@
     </div>
 </div>
 @endif
+</div>
 
 @endsection

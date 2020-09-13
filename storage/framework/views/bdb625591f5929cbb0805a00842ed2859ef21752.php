@@ -35,7 +35,7 @@
                    
                     <td><?php echo e($key+1); ?></td>
                     <td>
-                        <a href="#" class="text-primary"><?php echo e($gallery->name); ?></a>
+                        <a href="#" class="text-primary"><?php echo e($gallery->title); ?></a>
                     </td>
                     <td><?php echo e($gallery->images->count()); ?></td>
                    

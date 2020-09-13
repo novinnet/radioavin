@@ -16,10 +16,12 @@ class Artists extends Migration
        Schema::create('artists', function (Blueprint $table) {
            $table->bigIncrements('id');
             $table->string('fullname');
-            $table->string('photo')->nullable();
+             $table->string('slug');
+            $table->text('photo')->nullable();
             $table->enum('role',['singer','writer']);
             $table->text('bio')->nullable();
             $table->string('birthday')->nullable();
+            $table->boolean('popular')->default(0);
             $table->timestamps();
         });
 

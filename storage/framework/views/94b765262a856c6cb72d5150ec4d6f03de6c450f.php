@@ -56,6 +56,7 @@
     <script src="<?php echo e(asset('assets/vendors/dataTable/dataTables.bootstrap4.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/dataTable/dataTables.responsive.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/examples/datatable.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/sweetalert.min.js')); ?>"></script>
 
     <?php echo $__env->yieldContent('js'); ?>
     <script src="<?php echo e(asset('assets/js/custom.js')); ?>"></script>

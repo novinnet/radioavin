@@ -26,7 +26,7 @@ class MusicController extends Controller
         $title = $post->first()->title;
         $data['post'] = $post->first();
         $data['relatedPosts'] = $relatedPosts;
-        $data['title'] = $title;
+        $data['title'] = 'RadioAvin | '. $title;
         $data['type'] = $post->first()->type;
         $array = [];
         foreach ($all as $key => $item) {
@@ -35,13 +35,16 @@ class MusicController extends Controller
                 'id' => $item->id,
                 'name' => $item->title,
                 'artist' => $item->singers(),
-                'image' => asset(unserialize($item->poster)['resize']),
-                'path' => asset($item->files->first()->url),
-                'lyric' => $item->description
+                'image' => $item->image('resize'),
+                'path' => $item->file_url(),
+                'lyric' => $item->description,
+                'likes' => count($item->votes),
+                'views' => $item->views,
+                'released' => $item->released ? $item->released : null
             ];
         }
         $data['post']->increment('views');
-
+        
 
         $data['track_lists'] = json_encode($array);
 
@@ -55,21 +58,24 @@ class MusicController extends Controller
     {
 
        
-        $sliders = Post::where('type', 'music')->latest()->take(10)->get();
-        $trending = Post::where('type', 'music')->where('featured',0)->orderBy('views', 'DESC')->get();
-        $featured = Post::where('type', 'music')->where('featured',1)->orderBy('views', 'DESC')->get();
+        $sliders = Post::where('type', 'music')->orderBy('created_at', 'desc')->take(10)->get();
+
+        $featured = Post::where('type', 'music')->whereHas('categories',function($q){
+            $q->where('name','Featured');
+        })->orderBy('created_at', 'desc')->take(29)->get();
+        $trending = Post::where('type', 'music')->withCount('votes')->orderBy('votes_count','desc')->take(29)->get();
         
 
         $data['this_week'] = Post::where('type', 'music')->
         whereDate('created_at', '>', Carbon::now()->subWeeks(1)->toDateString())
-        ->orderBy('views', 'DESC')->take(8)->get();
+        ->orderBy('created_at', 'desc')->take(8)->get();
         $data['this_month'] = Post::where('type', 'music')->
         whereDate('created_at', '>', Carbon::now()->subMonths(1)->toDateString())
-        ->orderBy('views', 'DESC')->take(8)->get();
+        ->orderBy('created_at', 'desc')->take(8)->get();
         $data['all_time'] = Post::where('type', 'music')
-        ->orderBy('views', 'DESC')->take(8)->get();
+        ->orderBy('created_at', 'desc')->take(8)->get();
 
-        $data['albums'] = Album::has('posts')->latest()->get();
+        $data['albums'] = Album::has('posts')->orderBy('created_at', 'desc')->get();
         $data['sliders'] = $sliders;
         $data['trending'] = $trending;
         $data['featured'] = $featured;

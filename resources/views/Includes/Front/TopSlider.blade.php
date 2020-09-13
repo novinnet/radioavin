@@ -5,7 +5,7 @@
         <ul>
             @foreach ($sliders as $slider)
             <li>
-                <img src="{{asset(unserialize($slider->poster)['banner'])}}" style="width: 100%;" />
+                <img src="{{$slider->image('banner')}}" style="width: 100%;" />
                 <div class="songInfo inline">
                     @if ($type == 'photo')
                 <span class="title" title="{{$slider->title}}">{{$slider->title}}</span>

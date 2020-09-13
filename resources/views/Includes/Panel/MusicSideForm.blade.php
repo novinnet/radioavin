@@ -78,13 +78,21 @@
         <a href="#" class="btn btn-sm btn-primary mb-3"
             onclick="addCategory(event,'{{route('Panel.AddCatAjax')}}')">add</a>
         <div class="cat-wrapper  card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
+             <div class="custom-control custom-radio custom-control-inline ">
+            <input type="radio" id="catego" name="category" value=""
+                    class="custom-control-input" 
+                    checked>
+                <label class="custom-control-label" for="catego">No Category</label>
+             </div>
             @foreach (\App\Category::all() as $key=>$item)
-            <div class="custom-control custom-checkbox custom-control-inline ">
+            <div class="custom-control custom-radio custom-control-inline ">
+               @if($item->id !== 2 && $item->id !== 3) 
                 <a href="#" class="delete-tag"
                     onclick="deleteCategory(event,'{{$item->id}}','{{route('DeleteCategory')}}')"><i
                         class="fa fa-times"></i>
                 </a>
-                <input type="checkbox" id="category-{{$key+1}}" name="categories[]" value="{{$item->name}}"
+               @endif
+                <input type="radio" id="category-{{$key+1}}" name="category" value="{{$item->name}}"
                     class="custom-control-input scategory" @if (isset($post))
                     {{$post->categories->pluck('id')->contains($item->id) ? 'checked' : ''}} @endif>
                 <label class="custom-control-label" for="category-{{$key+1}}">{{$item->name}}</label>
@@ -122,14 +130,5 @@
 </div>
 {{-- end playlists --}}
 
-<div class="row">
-    <div class="form-group col-md-12">
-        <div class="custom-control custom-checkbox custom-control-inline ">
-            <input type="checkbox" id="featured" name="featured" value="1" class="custom-control-input " 
-            @if(isset($post)) @endif>
-            <label class="custom-control-label" for="featured">Featured</label>
-        </div>
-    </div>
-</div>
 
 </div>

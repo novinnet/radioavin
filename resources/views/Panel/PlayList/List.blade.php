@@ -37,7 +37,7 @@
                         {{\Carbon\Carbon::parse($playlist->created_at)->format('d F Y')}}
                     </td>
                     <td>
-                        <img src="{{asset($playlist->image[1])}}" alt="" width="100px">
+                        <img src="{{asset($playlist->image)}}" alt="" width="100px">
                     </td>
                     <td class="text-center"> 
                         <a href="{{route('Panel.EditPlayList',$playlist)}}" class="btn btn-sm btn-info">Edit</a>
@@ -45,9 +45,9 @@
                             class="btn btn-sm btn-danger   m-2">
                             <i class="fa fa-trash"></i>
                         </a>
-                         <a href="#"  title="حذف "
+                         <a href="#"  title=" "
                          onclick="changeFeaturedPlaylist(event,'{{$playlist->id}}','{{route('Panel.ChangeFeatured')}}')"
-                            class="btn btn-sm btn-danger   m-2">
+                            class="btn btn-sm {{$playlist->featured == 1 ? 'btn-success ' : 'btn-danger '}}   m-2">
                            Featured
                         </a>
                     </td>

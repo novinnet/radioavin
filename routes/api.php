@@ -1,18 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
+Route::get('get','Api\MainController@index');
+Route::get('playlists/latest','Api\PlayListController@latest');
+Route::get('playlists/{id}','Api\PlayListController@get');
+Route::get('featured','Api\MainController@featured');
+Route::get('newsongs','Api\MainController@newsongs');
+Route::get('hot-tracks','Api\MainController@hot_tracks');
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::post('search','Api\MainController@search');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});

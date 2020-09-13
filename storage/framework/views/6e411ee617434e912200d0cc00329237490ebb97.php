@@ -5,7 +5,7 @@
         <ul>
             <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li>
-                <img src="<?php echo e(asset(unserialize($slider->poster)['banner'])); ?>" style="width: 100%;" />
+                <img src="<?php echo e($slider->image('banner')); ?>" style="width: 100%;" />
                 <div class="songInfo inline">
                     <?php if($type == 'photo'): ?>
                 <span class="title" title="<?php echo e($slider->title); ?>"><?php echo e($slider->title); ?></span>

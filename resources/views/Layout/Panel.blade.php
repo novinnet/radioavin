@@ -56,6 +56,7 @@
     <script src="{{asset('assets/vendors/dataTable/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('assets/vendors/dataTable/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('assets/js/examples/datatable.js')}}"></script>
+    <script src="{{asset('assets/js/sweetalert.min.js')}}"></script>
 
     @yield('js')
     <script src="{{asset('assets/js/custom.js')}}"></script>

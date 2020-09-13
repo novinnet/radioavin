@@ -15,10 +15,10 @@ use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class AlbumController extends Controller
 {
+    public $destinationPath = 'album_images';
     public function List()
     {
         $albums = Album::latest()->get();
-
         return view('Panel.Album.List', ['albums' => $albums]);
     }
 
@@ -32,11 +32,10 @@ class AlbumController extends Controller
     {
 
 
-        $slug = SlugService::createSlug(Post::class, 'slug', $request->name);
-        $destinationPath = 'album_images';
+        $slug = SlugService::createSlug(Album::class, 'slug', $request->name);
         if (request()->hasFile('poster')) {
-            $poster = $this->SavePoster($request->file('poster'), $slug, $destinationPath);
-            $resize = $this->image_resize(179, 179, $poster, $destinationPath);
+            $poster = $this->SavePoster($request->file('poster'), $slug, $this->destinationPath);
+            $resize = $this->image_resize(179, 179, $poster, $this->destinationPath);
             File::delete(public_path() . '/' . $poster);
         } else {
             $resize = '';
@@ -63,34 +62,31 @@ class AlbumController extends Controller
         return view('Panel.Album.Add', compact(['album']));
     }
 
-    public function EditSave(Request $request, Artist $playlist)
+    public function EditSave(Request $request, $id)
     {
-        $destinationPath = 'playlist';
+         $album = Album::find($id);
         $slug = Str::slug($request->name);
 
         if ($request->hasFile('poster')) {
-            File::delete(public_path() . $playlist->poster);
+            File::delete(public_path() . $album->image);
 
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0777, true);
+            if (!File::exists($this->destinationPath)) {
+                File::makeDirectory($this->destinationPath, 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move($destinationPath, $fileName);
-            $Poster = "$destinationPath/$fileName";
+            $poster = $this->SavePoster($request->file('poster'), $slug, $this->destinationPath);
+            $resize = $this->image_resize(179, 179, $poster, $this->destinationPath);
+            File::delete(public_path() . '/' . $poster);
         } else {
-            $Poster = $playlist->poster;
+            $resize = $album->image;
         }
 
-        $playlist->fullname = $request->name;
-        $playlist->role = $request->role;
-        $playlist->bio = $request->bio;
-        $playlist->birthday = Carbon::parse($request->birthday);
-        $playlist->photo = $Poster;
-        $playlist->update();
+        $album->name = $request->name;
+        $album->information = $request->information;
+        $album->image = $resize;
+        $album->update();
 
-        toastr()->success('هنرمند با موفقیت ویرایش شد');
+        toastr()->success('آلبوم با موفقیت ویرایش شد');
 
-        return Redirect::route('Panel.ArtistList');
+        return Redirect::route('Panel.Album');
     }
 }

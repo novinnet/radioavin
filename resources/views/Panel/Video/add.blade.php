@@ -46,18 +46,17 @@
 
 
               
-                    <div class="col-md-12 text-center">
-                        <a class="btn btn-outline-primary" href="{{route('Panel.VideoList')}}">Back &nbsp;<i
-                                class="fas fa-arrow-circle-right"></i></a>
-                        <button type="submit" class="btn btn-primary"> @isset($post)
-                            Edit
-                            @else
-                            Save
-                            @endisset
-
-                        </button>
+                    <div class="col-md-12 my-2 btn--wrapper text-center">
+                        <input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />
                     </div>
-                
+               
+                <hr>
+                <div class="progress col-md-12 p-0">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                        style="width: 0%">
+                        0%
+                    </div>
+                </div>
             </form>
             <hr>
         </div>

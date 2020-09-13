@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -21,5 +22,17 @@ class Category extends Model
      public function posts()
     {
         return $this->belongsToMany(Post::class, 'post_category', 'category_id', 'post_id');
+    }
+
+
+    public function lastPosts()
+    {
+        if(strtolower($this->name) == 'new song'){
+
+            return $posts = $this->posts()->whereDate('created_at', '>', Carbon::now()->subDays(12)->toDateString())->latest()->take(8)->get();
+        }else{
+            return $posts = $this->posts()->whereDate('created_at', '>', Carbon::now()->subDays(12)->toDateString())->latest()->take(8)->get();
+
+        }
     }
 }

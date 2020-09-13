@@ -23,13 +23,16 @@ class AlbumController extends Controller
         $array = [];
         foreach ($all as $key => $item) {
 
-            $array[] = [
+             $array[] = [
                 'id' => $item->id,
                 'name' => $item->title,
                 'artist' => $item->singers(),
-                'image' => asset(unserialize($item->poster)['resize']),
-                'path' => asset($item->files->first()->url),
-                'lyric' => $item->description
+                'image' => $item->image('resize'),
+                'path' => $item->file_url(),
+                'lyric' => $item->description,
+                'likes' => count($item->votes),
+                'views' => $item->views,
+                'released' => $item->released ? $item->released : null
             ];
         }
 

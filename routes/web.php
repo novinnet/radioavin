@@ -37,6 +37,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::post('artist/add', 'Panel\ArtistController@Save')->name('Panel.AddArtist');
     Route::get('artist/edit/{artist}', 'Panel\ArtistController@Edit')->name('Panel.EditArtist');
     Route::post('artist/edit/{artist}', 'Panel\ArtistController@EditSave')->name('Panel.EditArtist');
+    Route::delete('artist/delete', 'Panel\ArtistController@Delete')->name('Panel.DeleteArtist');
 
     Route::get('playlists', 'Panel\PlaylistController@List')->name('Panel.PlayList');
     Route::get('playlist/add', 'Panel\PlaylistController@Add')->name('Panel.AddPlayList');
@@ -122,6 +123,7 @@ Route::group([], function () {
     Route::get('/download/{id}', 'Front\MainController@DownLoad')->name('DownLoad');
     Route::get('/myfavorite', 'Front\MainController@MyFavorite')->name('S.MyFavorite');
     Route::get('/showall', 'Front\MainController@ShowMore')->name('S.ShowMore');
+    // Route::get('/category/{slug}', 'Front\MainController@ShowMore')->name('S.ShowMore');
     Route::get('/play/{slug}', 'Front\MainController@Play')->name('S.Play');
     Route::get('/play/{slug}/{season}/{section}', 'Front\MainController@Play')->name('S.Series.Play');
 
@@ -130,11 +132,20 @@ Route::group([], function () {
 
 
     Route::get('album/{slug}', 'Front\AlbumController@Play')->name('Play.Album');
+    Route::get('artist/{slug}', 'Front\ArtistController@Show')->name('Artist.Show');
+
+
 
     Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
-    Route::post('ajax/search', 'Front\AjaxController@Search')->name('S.Search');
+    Route::post('ajax/search', 'Front\AjaxController@Search')->name('Ajax.Search');
     Route::post('ajax/favorite', 'Front\AjaxController@addToFavorite')->name('S.addToFavorite');
     Route::post('ajax/getplaylists', 'Front\AjaxController@getPlaylists')->name('Ajax.GetPlayLists');
     Route::post('ajax/newplaylist', 'Front\AjaxController@newPlaylist')->name('Ajax.NewPlaylist');
     Route::post('ajax/addtoplaylist', 'Front\AjaxController@addToPlaylist')->name('Ajax.AddToPlaylist');
+     
+    Route::post('ajax/likepost', 'Front\AjaxController@LikePost')->name('Ajax.LikePost');
+    Route::get('download', 'Front\AjaxController@DownLoad')->name('Ajax.DownLoad');
+    Route::post('addplaycount', 'Front\AjaxController@AddPlay')->name('Ajax.AddPlay');
+ 
+    
 });

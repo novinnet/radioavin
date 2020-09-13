@@ -27,9 +27,9 @@
             <div class="col-md-3">
                 <label for=""> Poster: </label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <img alt="" id="preview" width="100%" style="max-height: 400px" src="<?php if(isset($post)): ?>
-                                             <?php echo e(asset($post->poster)); ?> 
+                                             <?php echo e(asset($post->image('resize'))); ?> 
                                                 <?php else: ?>
                                                  <?php echo e(asset('assets/images/640x360.png')); ?> 
                                             <?php endif; ?>">

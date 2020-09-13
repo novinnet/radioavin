@@ -5,7 +5,7 @@
             <div class="music-cart-wrapper p-2">
             <a href="<?php echo e($item->url()); ?>">
                     <div class="music-cart">
-                        <img src="<?php echo e(asset(unserialize($item->poster)['banner'])); ?>" />
+                        <img src="<?php echo e($item->image('banner')); ?>" />
                         <div class="img-cover"></div>
                         <span class="tag">mp3</span>
                     </div>

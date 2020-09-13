@@ -6,9 +6,11 @@
                 <h2 class="title">Playlists</h2>
             </div>
         </div>
-        <div class="col text-right">
-            <a class="viewMore button primaryButton" href="#">View More</a>
+       <?php if($playlist_more): ?>
+            <div class="col text-right">
+            <a class="viewMore button primaryButton" href="<?php echo e(route('Playlists')); ?>">View More</a>
         </div>
+       <?php endif; ?>
     </div>
     <div class="">
         <div class="swiper-container">

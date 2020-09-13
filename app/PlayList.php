@@ -11,6 +11,7 @@ class PlayList extends Model
        
         'image' => 'array',
     ];
+    
 
     protected $with = ['tracks'];
 
@@ -30,6 +31,11 @@ class PlayList extends Model
        public function tracks()
     {
         return $this->belongsToMany(Post::class, 'post_playlist','play_list_id','post_id');
+    }
+
+    public static function getLatest()
+    {
+       return  static::latest()->take(8)->get();
     }
 
 }

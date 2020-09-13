@@ -2,7 +2,7 @@
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-1">
         <a href="<?php echo e($item->url()); ?>">
             <div class="music-cart">
-                <img src="<?php echo e(asset(unserialize($item->poster)['resize'])); ?>" class="size-131" />
+                <img src="<?php echo e($item->image('resize')); ?>" class="size-131" />
                 <div class="img-cover"></div>
 
             </div>

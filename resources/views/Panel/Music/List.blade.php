@@ -20,6 +20,7 @@
                     <th>Singer</th>
                     <th>Writer</th>
                     <th>Duration</th>
+                    <th>Category</th>
                     <th>Poster</th>
                     <th></th>
                 </tr>
@@ -42,8 +43,9 @@
                         @endforeach
                     </td>
                     <td class="text-success">{{$post->duration}}</td>
+                    <td class="text-success">{{count($post->categories) ? $post->categories->first()->name : '--' }}</td>
                     <td>
-                         <img src="{{asset(unserialize($post->poster)['resize'])}}" style="width: 70px" />
+                         <img src="{{$post->image('resize')}}" style="width: 70px" />
                     </td>
                     <td>
                         <a href="{{route('Panel.EditMusic',$post)}}" class="btn btn-sm btn-info">ویرایش</a>

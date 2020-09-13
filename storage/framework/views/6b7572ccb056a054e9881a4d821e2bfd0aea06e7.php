@@ -3,8 +3,8 @@
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-2">
         <a href="<?php echo e($playlist->playurl()); ?>">
             <div class="music-cart">
-                <?php if(isset($playlist->image) && !is_null($playlist->image) && $playlist->image[1]): ?>
-                <img src="<?php echo e(asset($playlist->image[1])); ?>" />
+                <?php if(isset($playlist->image) && !is_null($playlist->image)): ?>
+                <img src="<?php echo e(asset($playlist->image)); ?>" />
                 <?php else: ?>
                 <img src="<?php echo e(asset('frontend/images/remix.jpg')); ?>" />
                 <?php endif; ?>

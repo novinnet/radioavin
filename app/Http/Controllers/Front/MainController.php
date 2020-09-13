@@ -17,59 +17,60 @@ class MainController extends Controller
     public function index()
     {
 
-        $categories = Category::all();
-        $playlists = PlayList::latest()->take(10)->get();
-        $artists = Artist::where('role','singer')->latest()->get();
-        $data['banners'] = Post::latest()->take(2)->get();
+        $categories = Category::has('posts')->orderBy('orders','ASC')->get();
+        $playlists = PlayList::getLatest();
+        $artists = Artist::where('popular',1)->latest()->get();
+        $data['banners'] = Post::has('categories')->latest()->take(2)->get();
+        $data['hot_tracks'] = Post::orderBy('views','desc')->take(12)->get();
         $data['categories'] = $categories;
         $data['playlists'] = $playlists;
-          $data['artists'] = $artists;
-        $data['title'] = 'صفحه اصلی';
+        $data['playlist_more'] = PlayList::count() > 10 ? true : false;
+        $data['artists'] = $artists;
+        $data['title'] = 'RadioAvin';
         return view('Front.index', $data);
     }
 
     public function Play()
     {
-    
-            $model = Post::where('slug', request()->slug)->first();
-            if (!$model) {
+
+        $model = Post::where('slug', request()->slug)->first();
+        if (!$model) {
+            abort(404);
+        }
+
+        if ($model->type == 'movies') {
+            $post = $model;
+            $videos = $model->videos;
+
+            if (count($videos) == 0) {
+                return back();
+            }
+        }
+        if ($model->type == 'series') {
+            $season = $model->seasons->where('name', request()->season)->first();
+            if (!$season) {
                 abort(404);
             }
-
-            if ($model->type == 'movies') {
-                $post = $model;
-                $videos = $model->videos;
-
-                if (count($videos) == 0) {
-                    return back();
-                }
+            $post = $season->sections->where('section', request()->section)->first();
+            if (!$post) {
+                abort(404);
             }
-            if ($model->type == 'series') {
-                $season = $model->seasons->where('name', request()->season)->first();
-                if (!$season) {
-                    abort(404);
-                }
-                $post = $season->sections->where('section', request()->section)->first();
-                if (!$post) {
-                    abort(404);
-                }
-                $videos = $post->videos;
-            }
-            return view('Front.play', compact(['videos', 'post']));
-       
+            $videos = $post->videos;
+        }
+        return view('Front.play', compact(['videos', 'post']));
     }
 
     public function DownLoad($id)
     {
+
        
         $post = Post::find($id);
-        $url = $post->videos->first()->url;
-        $path      = parse_url($url, PHP_URL_PATH);
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-        $filename  = pathinfo($path, PATHINFO_FILENAME);
-        $filename = $post->slug . '.' . $extension;
-        header("Content-disposition:attachment; filename=$filename");
-        readfile($url);
+        $file_name = $post->title . '.mp3';
+        $file_url = $post->file_url();
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . $file_name . "\"");
+        readfile($file_url);
 
         // $tempImage = tempnam(sys_get_temp_dir(), $filename);
         // copy($url, $tempImage);
@@ -78,68 +79,56 @@ class MainController extends Controller
 
     public function MyFavorite()
     {
-        if(auth()->check()){
+        if (auth()->check()) {
 
             $myfavorites = auth()->user()->favorite;
         }
-        if(auth()->guard('admin')->check()){
-              $myfavorites = auth()->guard('admin')->user()->favorite;
+        if (auth()->guard('admin')->check()) {
+            $myfavorites = auth()->guard('admin')->user()->favorite;
         }
         return view('Front.MyFavorite', compact('myfavorites'));
     }
 
     public function ShowMore()
     {
-        $year = Carbon::now()->year();
-        $c = request()->c;
+
+        $q = request()->q;
         $type = request()->type;
-        if ($c == $year) {
-            if ($type == 'all') {
-                $data['posts'] = Post::where('year', $year)->latest()->get();
-                $data['title'] = 'فیلم های امسال';
-            }
-            if ($type == 'movie') {
-                $data['posts'] = Post::where(['year' => $year, 'type' => 'movies'])->latest()->get();
-                $data['title'] = 'فیلم های امسال';
-            }
-            if ($type == 'serie') {
-                $data['posts'] = Post::where(['year' => $year, 'type' => 'serie'])->latest()->get();
-                $data['title'] = 'سریال های امسال';
-            }
+
+        if ($q == 'this_month') {
+            $data['posts'] = Post::where('type', $type)->whereDate('created_at', '>', Carbon::now()->subMonths(1)->toDateString())
+                ->orderBy('created_at', 'DESC')->get();
+            $data['title'] = 'RadioAvin | popular this month';
+            $data['page_title'] = 'Popular This Month';
         }
-        if ($c == 'doble') {
-            if ($type == 'all') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
-            if ($type == 'movie') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->where('type', 'movies')->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
-            if ($type == 'serie') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->where('type', 'series')->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
+
+        if ($q == 'this_week') {
+            $data['posts'] = Post::where('type', $type)->whereDate('created_at', '>', Carbon::now()->subMonths(1)->toDateString())
+                ->orderBy('created_at', 'DESC')->get();
+            $data['title'] = 'RadioAvin | popular this week';
+            $data['page_title'] = 'Popular This Week';
         }
-        if ($c == 'new') {
-            if ($type == 'movie') {
-                $data['posts'] = Post::where('type', 'movies')->latest()->get();
-                $data['title'] = 'تازه ترین ها';
-            }
-            if ($type == 'serie') {
-                $data['posts'] = Post::where('type', 'series')->latest()->get();
-                $data['title'] = 'تازه ترین ها';
-            }
+
+        if ($q == 'all_time') {
+            $data['posts'] = Post::where('type', $type)->whereDate('created_at', '>', Carbon::now()->subMonths(1)->toDateString())
+                ->orderBy('created_at', 'DESC')->get();
+            $data['title'] = 'RadioAvin | popular all time';
+            $data['page_title'] = 'Popular All Time';
+        }
+        if ($q == 'trending') {
+
+            $data['title'] = 'RadioAvin | Trending';
+            $data['page_title'] = 'Trending';
+            $data['posts'] = Post::where('type',$type)->where('featured', 0)->orderBy('created_at', 'DESC')->get();
+        }
+        if ($q == 'featured') {
+            $data['title'] = 'RadioAvin | Featured';
+            $data['page_title'] = 'Featured';
+            $data['posts'] = Post::where('type',$type)->where('featured', 1)->orderBy('created_at', 'DESC')->get();
         }
 
 
 
-        return view('Front.ShowMore', $data);
+        return view('Front.show-all', $data);
     }
 }

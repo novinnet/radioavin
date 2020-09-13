@@ -18,8 +18,6 @@
                         @else
                         Add Music
                         @endisset
-
-
                     </h5>
                     <button type="submit" class="btn btn-primary">
                         @isset($post)
@@ -60,16 +58,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <a class="btn btn-outline-primary" href="{{route('Panel.MusicList')}}">Back &nbsp;<i
-                                class="fas fa-arrow-circle-right"></i></a>
-                        <button type="submit" class="btn btn-primary"> @isset($post)
-                            Edit
-                            @else
-                            Save
-                            @endisset
-
-                        </button>
+                    <div class="col-md-12 my-2 btn--wrapper text-center">
+                        <input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />
+                    </div>
+                </div>
+                <hr>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                        style="width: 0%">
+                        0%
                     </div>
                 </div>
             </form>
@@ -82,7 +79,20 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/datepicker/bootstrap-datepicker.min.css')}}">
     @endsection
     @section('js')
-    <script src="{{asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')}}"></script>
-  
 
+    <script src="{{asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')}}"></script>
+
+    <script>
+        //  $.validator.addMethod('filesize', function (value, element, param) {
+        // return this.optional(element) || (element.files[0].size <= param)
+        //  }, 'سایز تصویر نمی تواند بیشتر از دو مگابایت باشد');
+        // $.validator.addMethod(
+        // "regex",
+        // function(value, element, regexp) {
+        //     return this.optional(element) || regexp.test(value);
+        // },
+        // "Please check your input."
+        // );
+    
+    </script>
     @endsection

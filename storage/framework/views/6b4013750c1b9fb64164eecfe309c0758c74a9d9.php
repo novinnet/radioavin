@@ -16,10 +16,10 @@
                 </div>
             </div> -->
             <div class="row mt-2 justify-content-center">
-                <div class="col-6 ">
+                <div class="col-12 col-md-6 ">
                     <span class="copy-write-text text-center">
-                        © 2020 by ------- . All Rights Reserved.<br>
-                        The largest source of Persian entertainment providing the best Persian and Iranian music 24/7
+                        © 2020 by RadioAvin. All Rights Reserved.
+                        
                     </span>
                 </div>
             </div>

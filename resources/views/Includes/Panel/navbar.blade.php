@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="container-fluid">
             <div class="header-logo">
-                <a href="#">
+            <a href="{{route('MainUrl')}}">
                     <span class="logo-text d-none d-lg-block">RadioAvin</span>
                 </a>
             </div>

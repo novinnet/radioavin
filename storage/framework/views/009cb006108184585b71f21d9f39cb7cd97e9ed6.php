@@ -18,6 +18,7 @@
                     <th>Singer</th>
                     <th>Writer</th>
                     <th>Duration</th>
+                    <th>Category</th>
                     <th>Poster</th>
                     <th></th>
                 </tr>
@@ -42,8 +43,9 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </td>
                     <td class="text-success"><?php echo e($post->duration); ?></td>
+                    <td class="text-success"><?php echo e(count($post->categories) ? $post->categories->first()->name : '--'); ?></td>
                     <td>
-                         <img src="<?php echo e(asset(unserialize($post->poster)['resize'])); ?>" style="width: 70px" />
+                         <img src="<?php echo e($post->image('resize')); ?>" style="width: 70px" />
                     </td>
                     <td>
                         <a href="<?php echo e(route('Panel.EditMusic',$post)); ?>" class="btn btn-sm btn-info">ویرایش</a>

@@ -9,13 +9,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ArtistController extends Controller
 {
+    public $destinationPath = 'artist_image';
     public function List()
     {
         $artists = Artist::latest()->get();
-        return view('Panel.Artist.List',['artists'=>$artists]);
+        return view('Panel.Artist.List', ['artists' => $artists]);
     }
 
     public function Add()
@@ -25,14 +27,16 @@ class ArtistController extends Controller
 
     public function Save(Request $request)
     {
-      
-        $slug = Str::slug($request->name);
-         if (request()->hasFile('poster')) {
-            $destinationPath = 'artists';
-            $picextension = request()->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            request()->file('poster')->move($destinationPath, $fileName);
-            $poster = "$destinationPath/$fileName";
+
+        $slug = SlugService::createSlug(Artist::class, 'slug', $request->name);
+        if (request()->hasFile('poster')) {
+            $Poster = $this->SavePoster($request->file('poster'), 'poster-', "$this->destinationPath/$slug");
+            $resize =  $this->image_resize(600, 600, $Poster, "$this->destinationPath/$slug");
+
+
+
+
+            $poster = serialize(['resize' => $resize, 'banner' => $Poster]);
         } else {
             $poster = '';
         }
@@ -42,48 +46,67 @@ class ArtistController extends Controller
         $artist->bio = $request->bio;
         $artist->birthday = Carbon::parse($request->birthday);
         $artist->photo = $poster;
+        if(isset($request->popular) && $request->popular == 1) {
+            $artist->popular= $request->popular;
+        }
         $artist->save();
 
-         toastr()->success('هنرمند با موفقیت ثبت شد');
+        toastr()->success('هنرمند با موفقیت ثبت شد');
 
         return Redirect::route('Panel.ArtistList');
-
     }
-      public function Edit(Artist $artist)
+    public function Edit(Artist $artist)
     {
 
         return view('Panel.Artist.Add', compact(['artist']));
     }
 
-    public function EditSave(Request $request,Artist $artist)
+    public function EditSave(Request $request, Artist $artist)
     {
-         $destinationPath = 'artists';
-                 $slug = Str::slug($request->name);
 
-          if ($request->hasFile('poster')) {
-            File::delete(public_path() . $artist->poster);
 
-            if (!File::exists($destinationPath)) {
-                File::makeDirectory($destinationPath, 0777, true);
+        
+        if ($request->hasFile('poster')) {
+            File::deleteDirectory(public_path("$this->destinationPath/$artist->slug"));
+
+            if (!File::exists($this->destinationPath)) {
+                File::makeDirectory($this->destinationPath, 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move($destinationPath, $fileName);
-            $Poster = "$destinationPath/$fileName";
+            $Poster = $this->SavePoster($request->file('poster'), 'poster-', "$this->destinationPath/$artist->slug");
+            $resize =  $this->image_resize(600, 600, $Poster, "$this->destinationPath/$artist->slug");
+            $poster = serialize(['resize' => $resize, 'banner' => $Poster]);
         } else {
-            $Poster = $artist->poster;
+            $poster = $artist->photo;
         }
 
-         $artist->fullname = $request->name;
+        $artist->fullname = $request->name;
         $artist->role = $request->role;
         $artist->bio = $request->bio;
         $artist->birthday = Carbon::parse($request->birthday);
-        $artist->photo = $Poster;
+        $artist->photo = $poster;
+          if(isset($request->popular) && $request->popular == 1) {
+            $artist->popular= $request->popular;
+        }else{
+            $artist->popular= 0 ;
+        }
         $artist->update();
 
-         toastr()->success('هنرمند با موفقیت ویرایش شد');
+        toastr()->success('هنرمند با موفقیت ویرایش شد');
 
         return Redirect::route('Panel.ArtistList');
     }
 
+    public function Delete(Request $request)
+    {
+
+        $artist = Artist::find($request->id);
+        File::deleteDirectory(public_path("$this->destinationPath/$artist->slug"));
+
+        $artist->posts()->detach();
+
+        $artist->delete();
+
+        toastr()->success('هنرمند با موفقیت حذف شد');
+        return back();
+    }
 }

@@ -27,9 +27,9 @@
             <div class="col-md-3">
                 <label for=""> Poster: </label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($post)
-                                             {{asset($post->poster)}} 
+                                             {{asset($post->image('resize'))}} 
                                                 @else
                                                  {{asset('assets/images/640x360.png')}} 
                                             @endisset">

@@ -1,7 +1,7 @@
 <div class="music-cart-h ">
-    <a href="./single-music.html">
+    <a href="<?php echo e($item->url()); ?>">
         <div class="music-cart">
-            <img src="<?php echo e(asset(unserialize($item->poster)['resize'])); ?>" />
+            <img src="<?php echo e($item->image('resize')); ?>" />
 
             <div class="img-cover"></div>
 

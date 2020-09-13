@@ -59,7 +59,7 @@
                 @if (count($this_month) > 23)
 
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="{{route('S.ShowMore')}}?type=video&q=this_month">
                         <span class="view-event-sp music-cart-wrapper">View Event</span>
                     </a>
                 </div>
@@ -76,7 +76,7 @@
                 @if (count($this_week) > 23)
 
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="{{route('S.ShowMore')}}?type=video&q=this_week">
                         <span class="view-event-sp music-cart-wrapper">View Event</span>
                     </a>
                 </div>
@@ -92,7 +92,7 @@
 
                 @if (count($all_time) > 23)
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="{{route('S.ShowMore')}}?type=video&q=all_time">
                         <span class="view-event-sp music-cart-wrapper">View Event</span>
                     </a>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Artist;
 use App\Plan;
 use App\Post;
 use App\Mail\Discount;
@@ -11,6 +12,7 @@ use App\Discount as AppDiscount;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\UserPlaylist;
+use App\Vote;
 use Illuminate\Database\Eloquent\Collection;
 use UplaylistTrack;
 
@@ -86,7 +88,7 @@ class AjaxController extends Controller
         $user_id = auth()->user()->id;
         $request->session()->put("track_id", $request->id);
         $user_playlists = auth()->user()->playlists->where('type', $request->type);
-       
+
         $url = route('Ajax.NewPlaylist');
 
 
@@ -94,15 +96,14 @@ class AjaxController extends Controller
 
 
         foreach ($user_playlists as $key => $playlist) {
-            if($playlist->tracks->contains($track)){
+            if ($playlist->tracks->contains($track)) {
                 $icon = '<i class="fa fa-minus"></i>';
-            }else{
+            } else {
                 $icon = '<i class="fa fa-plus"></i>';
-
             }
-            $list .= ' <div class="pl-item"><a href="'.$playlist->playurl().'" class="user-playlist">' . $playlist->name . ' ('.count($playlist->tracks).') </a>
+            $list .= ' <div class="pl-item"><a href="' . $playlist->playurl() . '" class="user-playlist">' . $playlist->name . ' (' . count($playlist->tracks) . ') </a>
         <div>
-            <a href="#" data-id="' . $playlist->id . '" data-url="' . $playlist->addurl() . '" onclick="addToPlaylist(this)"class="add"> '.$icon.' </a>
+            <a href="#" data-id="' . $playlist->id . '" data-url="' . $playlist->addurl() . '" onclick="addToPlaylist(this)"class="add"> ' . $icon . ' </a>
             <a href="#" onclick=""> <i class="fa fa-edit"></i> </a>
         </div>
         </div>';
@@ -147,7 +148,7 @@ class AjaxController extends Controller
             $status = 'detach';
         } else {
             $playlist->tracks()->attach($track);
-             $status = 'attach';
+            $status = 'attach';
         }
 
         return response()->json($status, 200);
@@ -181,145 +182,97 @@ class AjaxController extends Controller
         $cat = [];
         $caption = [];
         $year = [];
+        // dd($request->all());
 
-        // dd($request->data);
-        if ($request->data) {
+        $word = $request->word;
+        if ($word !== null) {
+            $posts = collect(Post::where('title', 'like', '%' . $word . '%')->latest()->take(10)->get());
+            $artists = collect(Artist::where('fullname', 'like', '%' . $word . '%')->latest()->take(10)->get());
+            $all = $posts->merge($artists);
+        } else {
+        }
 
+        $articles = $this->createArticles($all);
 
-            foreach ($request->data as $key => $data) {
-                if ($data['type'] == 'word') {
+        return response()->json($articles, 200);
+    }
 
-                    $word = $data['key'];
-                } else {
-                    $word = null;
-                }
-            }
-
-
-            foreach ($request->data as $key => $data) {
-                if ($data['type'] == 'genre') {
-                    $cat[] = $data['id'];
-                }
-            }
-            foreach ($request->data as $key => $data) {
-                if ($data['type'] == 'caption') {
-                    $caption[] = $data['id'];
-                }
-            }
-            foreach ($request->data as $key => $data) {
-                if ($data['type'] == 'year') {
-                    $year[] = $data['year'];
-                }
-            }
-            foreach ($request->data as $key => $data) {
-                if ($data['type'] == 'order') {
-                    $order = $data['name'];
-                }
-            }
-
-            // dd($order);
-            // dd([explode(';',$year[0])[0],explode(';',$year[0])[1]]);
-            // dd([$cat, $caption, $year]);
-            if ($word !== null) {
-                $posts = Post::where('name', 'like', '%' . $word . '%')
-                    ->orWhere('title', 'like', '%' . $word . '%')
-                    ->orWhereHas('actors', function ($q) use ($word) {
-                        $q->where('name', 'like', '%' . $word . '%');
-                    })->get();
+    public function createArticles($all)
+    {
+        $article = '';
+        foreach ($all as $key => $obj) {
+            if ($key % 2 == 0) {
+                $color = 'ac_even';
             } else {
-
-
-                if (count($cat) > 0 && count($caption) > 0 && count($year) > 0) {
-
-                    $posts = Post::whereHas('categories', function ($q) use ($cat) {
-                        $q->whereIn('id', $cat);
-                    })->whereHas('categories', function ($q) use ($cat) {
-                        $q->whereIn('id', $cat);
-                    })->whereBetween('year', [explode(';', $year[0])[0], explode(';', $year[0])[1]])->get();
-                } elseif (count($cat) > 0 && count($caption)) {
-                    $posts = Post::whereHas('categories', function ($q) use ($cat) {
-                        $q->whereIn('id', $cat);
-                    })->whereHas('captions', function ($q) use ($caption) {
-                        $q->whereIn('lang', $caption);
-                    })->get();
-                } elseif (count($cat) > 0) {
-                    $posts = Post::whereHas('categories', function ($q) use ($cat) {
-                        $q->whereIn('id', $cat);
-                    })->get();
-                } elseif (count($caption) > 0) {
-                    $posts = Post::whereHas('captions', function ($q) use ($caption) {
-                        $q->whereIn('lang', $caption);
-                    })->get();
-                } elseif (count($year) > 0) {
-                    $posts = Post::whereBetween('year', [explode(';', $year[0])[0], explode(';', $year[0])[1]])->get();
-                }
-
-
-
-                if ($order !==  'default') {
-                    if ($order == 'new') {
-
-                        $posts = $posts->sortBy('created_at');
-                    }
-                    if ($order == 'rate') {
-
-                        $posts = $posts->sortBy('imdbRating');
-                    }
-                    if ($order == 'yearasc') {
-
-                        $posts = $posts->sortBy('year');
-                    }
-                    if ($order == 'yeardsc') {
-
-                        $posts = $posts->sortByDesc('year');
-                    }
-                }
+                $color = 'ac_odd';
             }
+            if ($obj instanceof Post) {
+                $article .= '  <li class="' . $color . '">
+                                  <a href="' . $obj->url() . '">
+                                    <div class="image_crop"><img
+                                            src="' . asset(unserialize($obj->poster)['resize']) . '">
+                                    </div>
+                                    <div class="text">
+                                    ' . Str::limit($obj->title, 20, '...') . '
+                                    </div> <span
+                                        class="label">' . $obj->get_type() . '</span>
+                                   </a>
+                                </li>';
+            } else {
+                $article .= ' <li class="' . $color . '">
+                                   <a href="' . $obj->url() . '">
+                                        <div class="image_crop"><img
+                                            src="' . asset(unserialize($obj->photo)['resize']) . '">
+                                    </div>
+                                    <div class="text">' . Str::limit($obj->fullname, 20, '') . '</div> <span
+                                        class="label">Artist</span>
+                                   </a>
+                                </li>';
+            }
+        }
+        return $article;
+    }
 
+    public function LikePost()
+    {
+        $id = request()->post_id;
+        $post = Post::whereId($id)->first();
 
+        if (count($post->votes->where('ip', request()->ip())) == 0) {
 
-            $articles = $this->createArticles($posts);
+            Vote::create([
+                'votable_id' => request()->post_id,
+                'votable_type' => 'App\Post',
+                'ip' => request()->ip(),
+                'status' => 1
+            ]);
 
-            return response()->json($articles, 200);
+            return response()->json(['likes' => count($post->votes), 'status' => true], 200);
+        } else {
+            return response()->json(['likes' => count($post->votes), 'status' => false], 200);
         }
     }
 
-    public function createArticles($posts)
+    public function DownLoad()
     {
-        $article = '';
-        foreach ($posts as $key => $post) {
+        $id = request()->id;
+        $post = Post::find($id);
+        $file_name = 'file.mp3';
+        $file_url = $post->file_url();
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . $file_name . "\"");
+        readfile($file_url);
+    }
 
-
-            $article .= '
-             <div class="col-6 col-md-3 col-lg-2">
-    <a href="' . $post->path() . '" data-id="1" >
-        <div class="movie-sections-box">
-            <div class="img-box-movies">
-                <img src="' . asset($post->poster) . '" alt="' . $post->name . '">
-                <div class="cover-img-movies-details">
-                    <span>
-                        ' . $post->name . ' -';
-            if ($post->type == 'series') {
-
-                $article .= \Morilog\Jalali\Jalalian::forge($post->first_publish_date)->format('%Y');
-            } else {
-
-                $article .= \Morilog\Jalali\Jalalian::forge($post->released)->format('%Y');
-            }
-
-            $article .= '</span>
-                    <span>
-                        <i class="fa fa-heart"></i>
-                        89%
-                    </span>
-                </div>
-            </div>
-            <h5>
-                ' . $post->title . '
-            </h5>
-        </div>
-    </a></div>';
+    public function AddPlay(Request $request)
+    {
+    
+        if (!request()->hasCookie($_SERVER['REMOTE_ADDR'])) {
+            $post = Post::find($request->track_id);
+            $post->increment('views');
+             // ۱۰ دقیقه
+            cookie()->queue(cookie($_SERVER['REMOTE_ADDR'], null, 15));
         }
-        return $article;
     }
 }

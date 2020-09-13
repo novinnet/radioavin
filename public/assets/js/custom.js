@@ -2,7 +2,9 @@
 
 (function ($) {
 
-    
+
+
+
     $(".js-example-basic-single").select2({
         placeholder: "انتخاب کنید",
     });
@@ -217,7 +219,7 @@
 
             file: {
                 required: true,
-              
+
             },
         },
     });
@@ -233,33 +235,83 @@
             },
 
             poster: {
-                
+
                 filesize: 1000 * 1024,
                 accept: "jpg|jpeg|png|JPG|JPEG|PNG",
             },
-            released: "required",
+            file: {
+
+
+                accept: "mp3,mp4",
+            },
             desc: "required",
             "categories[]": "required",
-          
-        },
-        messages: {
-            title: {
-                required: "لطفا عنوان فایل را وارد نمایید",
-                maxlength: "تعداد کاراکترها بیش از حد مجاز میباشد",
-            },
 
-            released: "تاریخ انتشار را وارد نمایید",
-            desc: "توضیحات برای فایل الزامی است",
-            "categories[]": "وارد کردن دسته بندی الزامی است",
-
-           
-            file: {
-                required: "لطفا فایل آهنگ را آپلود کنید",
-            },
         },
+     
     });
 
-    
+    $('#upload-music').ajaxForm({
+        beforeSerialize: function ($Form, options) { },
+        beforeSend: function () {
+            $('#success').empty();
+
+        },
+        uploadProgress: function (event, position, total, percentComplete) {
+            $('.btn--wrapper').html(`<button class="btn btn-success" type="button" disabled="">
+                    <span class="spinner-border spinner-border-sm m-l-5 fs-0-8" role="status" aria-hidden="true"></span>
+                    loading ... 
+                </button>`)
+
+            $('.progress-bar').text(percentComplete + '%');
+            $('.progress-bar').css('width', percentComplete + '%');
+
+
+        },
+        success: function (data) {
+            $(".btn--wrapper").html(
+                `<input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />`
+            );
+
+            if (data.errors) {
+                swal("خطا"
+                    , data.errors
+                    ,
+                    "error", {
+                    button: "OK"
+                });
+            }
+            if (data.success) {
+
+                swal("Success"
+                    , "Insert Data Successfully"
+                    ,
+                    "success", {
+                    button: "OK"
+                });
+            }
+            $('.progress-bar').text('Complete');
+            $('.progress-bar').css('width', '0%');
+
+        },
+
+        error: function (data) {
+
+            swal("خطا"
+                , data.responseJSON.errors
+                ,
+                "error", {
+                button: "OK"
+            });
+            $(".btn--wrapper").html(
+                `<input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />`
+            );
+            $('.progress-bar').css('width', '0%');
+
+        }
+    });
+
+
 
     $("#upload").click(function () {
         if ($("#upload-file").valid()) {
@@ -345,20 +397,20 @@ function addFile(event, el) {
 function addCategory(event, url) {
     event.preventDefault();
     var el = $(event.target);
-   
+
     let name = $(event.target).prev().find("#category").val();
     var token = $('meta[name="_token"]').attr("content");
     // data = ;
 
-  var  request = $.post(url, { name: name, _token: token });
+    var request = $.post(url, { name: name, _token: token });
     request.done(function (res) {
 
         if (name !== "") {
             let id = Math.random();
             let wrapper = $(".cat-wrapper");
             wrapper.prepend(`
-         <div class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" id="${id}" name="categories[]"
+         <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="${id}" name="category"
                                   value="${name}"
                                     class="custom-control-input" checked>
                                 <label class="custom-control-label" for="${id}">${name}</label>
@@ -493,10 +545,10 @@ function addCaption(event) {
                             <a class="text-danger" style="position:absolute;left:0;" onclick="removeCaption(event)"><i class="fas fa-times" ></i></a>
                                 <label for="" class="col-md-2">زیرنویس</label>
                                 <div class="col-md-3 ">
-                                   <input type="text" class="form-control" name="captions[][1]">
+                                   <input type="text" class="form-control" name="captions[${id}][1]">
                                 </div>
                                 <div class="col-md-3">
-                                   <input type="file" name="captions[][2]" id="" class="form-control" />
+                                   <input type="file" name="captions[${id}][2]" id="" class="form-control" />
                                 </div>
                             </div>
        `);
@@ -612,15 +664,15 @@ $(".dropify").dropify(dropifyOptions);
 
 
 
-function deleteCategory(event,id, url) {
+function deleteCategory(event, id, url) {
     event.preventDefault()
     var token = $('meta[name="_token"]').attr("content");
 
-        var request = $.post(url, { id: id, _token: token });
-        request.done(function (res) {
-            $(event.target).parents('.custom-control').remove()
-        });
-    
+    var request = $.post(url, { id: id, _token: token });
+    request.done(function (res) {
+        $(event.target).parents('.custom-control').remove()
+    });
+
 }
 
 
@@ -681,4 +733,19 @@ function deleteFile(event, id, url) {
     request.done(function (res) {
         $(event.target).parents(".file-wrapper").remove();
     });
+}
+
+function changeFeaturedPlaylist(event, id , url) {
+     event.preventDefault();
+     var token = $('meta[name="_token"]').attr("content");
+     var request = $.post(url, { id: id, _token: token });
+     request.done(function(res) {
+        if(res.data == 1) {
+            $(event.target).removeClass('btn-danger')
+            $(event.target).addClass('btn-success')
+        }else{
+            $(event.target).removeClass("btn-success");
+            $(event.target).addClass("btn-danger");
+        }
+     });
 }

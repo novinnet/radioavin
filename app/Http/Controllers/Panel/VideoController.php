@@ -40,34 +40,31 @@ class VideoController extends Controller
     public function Save(Request $request)
     {
 
-        
-
-        $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
-
+        $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
         $destinationPath = "videos/$slug";
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0777, true);
         }
+        
         $post = new Post;
         $post->post_author = 1;
         $post->title = $request->title;
         $post->type = 'video';
-        if ($request->featured && $request->featured == 1) {
-            $post->featured = 1;
-        } else {
-            $post->featured = 0;
-        }
+       
         $post->description = $request->translation;
         $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
         $poster186 =  $this->image_resize(186, 139, $Poster, $destinationPath);
-        $banner =    $this->image_resize(440, 212, $Poster, $destinationPath);
+        $banner =    $this->image_resize(620,300, $Poster, $destinationPath);
         File::delete(public_path() . '/' . $Poster);
-        $post->released = Carbon::parse($request->released)->toDateTimeString();
+
+        if ($request->released) {
+            $post->released = Carbon::parse($request->released)->toDateTimeString();
+        }
         $post->poster = serialize(['resize' => $poster186, 'banner' => $banner]);
         $post->duration = $this->get_duration($request->file[1][1]);
         if ($post->save()) {
 
-            $this->saveInformation($request, $post, $destinationPath);
+            $this->saveInformation($request, $post, "video");
         } else {
             return back();
         }
@@ -87,19 +84,20 @@ class VideoController extends Controller
     {
 
         // dd($request->all());
-        $slug = Str::slug($post->name);
+        $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
 
         $destinationPath = "video/$slug";
         if ($request->hasFile('poster')) {
-            File::delete(public_path() . $post->poster);
+            File::deleteDirectory(public_path("video/$post->slug"));
 
             if (!File::exists($destinationPath)) {
                 File::makeDirectory($destinationPath, 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = 'poster_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move($destinationPath, $fileName);
-            $Poster = "$destinationPath/$fileName";
+            $Poster = $this->SavePoster($request->file('poster'), 'poster-', $destinationPath);
+            $poster161 =  $this->image_resize(300, 300, $Poster, $destinationPath);
+            $banner =    $this->image_resize(620,300, $Poster, $destinationPath);
+            File::delete(public_path() . '/' . $Poster);
+            $post->poster = serialize(['resize' => $poster161, 'banner' => $banner]);
         } else {
             $Poster = $post->poster;
         }
@@ -110,16 +108,12 @@ class VideoController extends Controller
         $post->released = Carbon::parse($request->released)->toDateTimeString();
         $post->poster = $Poster;
 
-        if ($request->featured && $request->featured == 1) {
-            $post->featured = 1;
-        } else {
-            $post->featured = 0;
-        }
+       
         $post->update();
 
 
-
-        $this->editInformation($request, $post, $destinationPath);
+        $session = session()->put('temp', $_FILES['file']['tmp_name']);
+        $this->editInformation($request, $post, "video");
 
         toastr()->success('پست با موفقیت ویرایش شد');
 
@@ -129,14 +123,16 @@ class VideoController extends Controller
     public function DeleteCaption(Request $request)
     {
         $caption = Caption::find($request->id);
-        File::delete(public_path() . $caption->url);
+        $this->delete_with_ftp($caption->url);
         $caption->delete();
         return response()->json('success', 200);
     }
+
     public function DeleteFile(Request $request)
     {
         $file = PostFile::find($request->id);
-        File::delete(public_path() . $file->url);
+
+        $this->delete_with_ftp($file->url);
         $file->delete();
         return response()->json('success', 200);
     }

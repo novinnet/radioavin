@@ -20,10 +20,10 @@
                     </div>
                 </div>
                 <div class="like text-center">
-                    <span>
-                        <i class="fas fa-heart"></i>
-                        50,357 Like
-                    </span>
+                <a class="like-post" data-id="<?php echo e($post->id); ?>" onclick="likePost(event , '<?php echo e(route('Ajax.LikePost')); ?>')">
+                       &#10084;
+                        <?php echo e(count($post->votes)); ?> Like
+                    </a>
                 </div>
                 <!-- Define the section for displaying the seek slider-->
                 <div class="slider_container">
@@ -46,9 +46,9 @@
                         <div class="next-track" onclick="nextTrack()">
                             <i class="fas fa-angle-double-right"></i>
                         </div>
-                        <div class="next-track">
-                            <i class="fas fa-plus"></i>
-                        </div>
+                    <a href="<?php echo e(route('DownLoad',$post->id)); ?>" class="download-btn"  >
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
 
 
@@ -68,12 +68,15 @@
                         <div class="contentInner">
                             <div class="mp3Description">
                                 <div class="views">Plays: <?php echo e($post->views ?? ''); ?></div>
-                                <div pubdate="pubdate" class="dateAdded">Released: <?php echo e($post->released); ?></div>
+                                <div pubdate="pubdate" class="dateAdded">
+                                <?php if($post->released): ?>
+                                    Released: <?php echo e($post->released); ?>
+
+                                <?php endif; ?>
+                                </div>
                             </div>
 
-                            <div class="tagsContainer">
-                                <span class="tags"><a href="/mp3s/browse/tag/poobon">poobon</a></span>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -201,7 +204,7 @@
     // Create the audio element for the player
     let curr_track = document.createElement('audio');
     // Define the list of tracks that have to be played
-    let track_list =JSON.parse(<?php echo json_encode($track_lists, 15, 512) ?>)
+    var track_list =JSON.parse(<?php echo json_encode($track_lists, 15, 512) ?>)
     
     
     ajaxurl = "<?php echo e(route("S.addToFavorite")); ?>"
@@ -252,6 +255,13 @@
         track_artist.textContent = track_list[track_index].artist;
         now_playing.textContent = "PLAYING " + (track_index + 1) + " OF " + track_list.length;
         jQuery('.lyrics-span').html(track_list[track_index].lyric)
+        jQuery('.like-post').attr('data-id',track_list[track_index].id)
+        jQuery('.like-post').html(`<i class="fas fa-heart"></i>${track_list[track_index].likes} Like`)
+        jQuery('.views').html(`Plays: ${track_list[track_index].views}`)
+        jQuery('.download-btn').attr('href',mainUrl + '/download/' +track_list[track_index].id)     
+        if (track_list[track_index].released !== null) {
+            jQuery('.dateAdded').html(`Released: ${track_list[track_index].released}`)
+        }      
         // Set an interval of 1000 milliseconds
         // for updating the seek slider
         updateTimer = setInterval(seekUpdate, 1000);
@@ -263,6 +273,22 @@
         // Apply a random background color
         random_bg_color();
     }
+    
+function likePost(event,url) {
+    event.preventDefault()
+    post_id = $(event.target).closest(".like-post").attr('data-id');
+        var request = $.post(url, {
+            post_id: post_id,
+            _token: token
+        });
+        request.done(function(res) {
+            if(res.status) {
+                $(event.target).closest(".like-post").html(` &#10084;
+                             ${res.likes + 1} Like`);
+             track_list[track_index].likes++;
+         }
+        });
+}
 
     function random_bg_color() {
         // Get a random number between 64 to 256
@@ -293,13 +319,29 @@
 
     }
 
+    function  addPlayCount() {
+        var url = mainUrl + '/addplaycount'
+        var track_id = track_list[track_index].id;
+        var request = $.post(url, {
+        _token: token,
+        track_id:track_id
+    });
+    request.done(function(res) {
+        //  if (res.length > 0) {
+        //      $(".ac_results").fadeIn();
+        //      $(".ac_results ul").html(res);
+        //  }
+    });
+    }
+
     function playTrack() {
         // Play the loaded track
+       
         curr_track.play();
         isPlaying = true;
-
         // Replace icon with the pause icon
         playpause_btn.innerHTML = '<i class="fas fa-pause"></i>';
+        addPlayCount();
 
     }
 

@@ -1,6 +1,6 @@
 <?php $__env->startSection('content'); ?>
 <?php if(!isset($artist)): ?>
-    <?php echo $__env->make('Includes.Panel.artistmenu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('Includes.Panel.artistmenu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php endif; ?>
 
 <div class="container-fluid">
@@ -24,8 +24,12 @@
                             <div class="form-group col-md-6">
                                 <label for=""> Role : </label>
                                 <select name="role" id="role" class="form-control custom-control">
-                                    <option value="Singer">Singer</option>
-                                    <option value="Writer">Writer</option>
+                                    <option value="Singer"
+                                        <?php echo e(isset($artist) && $artist->role == 'singer' ? 'selected' : ''); ?>>Singer
+                                    </option>
+                                    <option value="Writer"
+                                        <?php echo e(isset($artist) && $artist->role == 'writer' ? 'selected' : ''); ?>>Writer
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -37,9 +41,9 @@
                                     </div>
                                     <div class="col-md-9">
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="<?php if(isset($artist)): ?>
-                                             <?php echo e(asset($artist->photo)); ?> 
+                                             <?php echo e(asset(unserialize($artist->photo)['resize'])); ?> 
                                                 <?php else: ?>
-                                                 <?php echo e(asset('assets/images/images.png')); ?> 
+                                                 <?php echo e(asset('assets/images/image-placeholder.jpg')); ?> 
                                             <?php endif; ?>">
                                         <input type="file" name="poster" id="poster" />
                                     </div>
@@ -57,8 +61,18 @@
                             <div class="form-group col-md-6">
                                 <label for="">BirthDay: </label>
                                 <input type="text" class="form-control  datepicker" name="birthday" id="birthday"
-                                    <?php if(isset($artist)): ?> value="<?php echo e(\Carbon\Carbon::parse($artist->birthday)->format('d F Y')); ?>"
-                                    <?php endif; ?>>
+                                    <?php if(isset($artist)): ?>
+                                    value="<?php echo e(\Carbon\Carbon::parse($artist->birthday)->format('d F Y')); ?>" <?php endif; ?>>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <div class="custom-control custom-checkbox custom-control-inline ">
+                                    <input type="checkbox" id="popular" name="popular" value="1"
+                                        class="custom-control-input " <?php if(isset($artist) && $artist->popular == 1): ?> checked <?php endif; ?>>
+                                    <label class="custom-control-label" for="popular">Add To Popular Artists</label>
+                                </div>
                             </div>
                         </div>
                     </div>

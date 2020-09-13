@@ -19,14 +19,13 @@ class CategoryController extends Controller
 
     public function Show(Request $request, $name)
     {
-        $category = Category::where('latin', $name)->first();
+        $category = Category::where('name', $name)->first();
         if ($category) {
-            $sliders = Slider::withCategory($name);
-            $data['sliders'] = $sliders;
-            $data['title'] = $name ;
-           $data['posts'] = $category->posts;
+            $data['posts'] = $category->posts()->latest()->get();
+            $data['title'] = 'RadioAvin | ' . $category->name;
+            $data['page_title'] = ucfirst($category->name);
          
-            return view('Front.showCategory', $data);
+            return view('Front.show-all', $data);
         } else {
             abort(404);
         }

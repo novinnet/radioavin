@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-6 col-md-4 ">
-                    
+                 
                 </div>
                 <div class="col-6 col-md-4 pt-2 pt-md-0  text-md-center text-right justify-content-center align-middle">
                     <div>
@@ -18,7 +18,18 @@
                                     </g>
                                 </svg>
                             </label>
-                            <input type="text" placeholder="search">
+                        <input type="text" placeholder="search" oninput="getResult(event,'<?php echo e(route('Ajax.Search')); ?>')">
+                        </div>
+                        <div class="ac_results"
+                            style="position: absolute; width: 300px; top: 40px; left: 634.5px; display: none;">
+                            <ul style="max-height: 250px; overflow: auto;">
+                                
+                              
+                              
+                                
+                              
+                    
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -26,15 +37,14 @@
                 <div class="col-5 col-md-4 border-top-my d-inline-block d-md-none">
                     <div class="logo">
                         <a class="logo-url" href="<?php echo e(route('MainUrl')); ?>">
-                            <img src="<?php echo e(asset('frontend/images/screencapture-radiojavan-2020-07-13-15_06_28.png')); ?>"
+                            <img src="<?php echo e(asset('frontend/images/logo radioavin- png2.png')); ?>"
                                 height="38" width="172" />
                         </a>
                     </div>
                 </div>
                 <div class="col-7 col-md-4 border-top-my pr-">
                     <ul class="top-header-menu text-right">
-                        <li class="text-red d-none d-md-block"><a href="#">Listen Now</a></li>
-                        <li class=" d-none d-md-block"><a href="#">Play List</a></li>
+                       
                         <?php if(auth()->guard()->check()): ?>
                         <li class="d-none d-md-block">
                             <button class="profile-icon" aria-describedby="ui-tooltip-1">
@@ -91,7 +101,7 @@
             <div class="nav-menu-logo">
                 <div class="logo">
                     <a class="logo-url" href="<?php echo e(route('MainUrl')); ?>">
-                        <img src="<?php echo e(asset('frontend/images/screencapture-radiojavan-2020-07-13-15_06_28.png')); ?>"
+                        <img src="<?php echo e(asset('frontend/images/logo_radioavin.png')); ?>"
                             height="38" width="172" />
                     </a>
                 </div>
@@ -100,11 +110,12 @@
             <div class="nav-main-menu">
                 <nav>
                     <ul>
+                         <li><a href="<?php echo e(route('MainUrl')); ?>">Home</a></li>
                         <li><a href="<?php echo e(route('Mp3s')); ?>">Music</a></li>
                         <li><a href="<?php echo e(route('Playlists')); ?>">PlayList</a></li>
                         <li><a href="<?php echo e(route('Videos')); ?>">Videos</a></li>
-                        <li><a href="./podcasts.html">Podcasts</a></li>
-                        <li><a href="<?php echo e(route('Photos')); ?>">Photos</a></li>
+                        
+                        
                         <!-- <li><a href="#">Music</a></li> -->
                     </ul>
                 </nav>

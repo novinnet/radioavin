@@ -19,7 +19,7 @@
                             <div class="form-group col-md-6">
                                 <label for=""><span class="text-danger">*</span> Name : </label>
                                 <input required type="text" class="form-control" name="name" id="name"
-                                    value="<?php echo e($playlist->namae ?? ''); ?>" placeholder="" required>
+                                    value="<?php echo e($playlist->name ?? ''); ?>" placeholder="" required>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="<?php if(isset($playlist)): ?>
-                                             <?php echo e(asset($playlist->photo)); ?> 
+                                             <?php echo e(asset($playlist->image)); ?> 
                                                 <?php else: ?>
                                                  <?php echo e(asset('assets/images/640x360.png')); ?> 
                                             <?php endif; ?>">
@@ -51,9 +51,9 @@
                             <div class="form-group col-md-12">
                                 <label for=""><span class="text-danger">*</span> Add Songs: </label>
                                 <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
-                                    <?php $__currentLoopData = $songs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $song): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = \App\Post::where('type','music')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $song): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($song->id); ?>"
-                                        <?php echo e(isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''); ?>>
+                                        <?php echo e(isset($playlist) && $playlist->tracks()->pluck('id')->contains($song->id) ? 'selected' : ''); ?>>
                                         <?php echo e($song->title); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>

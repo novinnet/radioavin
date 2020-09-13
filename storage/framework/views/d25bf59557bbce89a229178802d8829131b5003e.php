@@ -1,10 +1,26 @@
 <?php $__env->startSection('main'); ?>
 <?php echo $__env->make('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'music'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<?php echo $__env->make('Includes.Front.Alfabet', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<div id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="overlay-content">
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Clients</a>
+    <a href="#">Contact</a>
+  </div>
+</div>
+
+
+<div class="col-md-12 text-center">
+    <a href="#"  onclick="openFilter()" class="filter-btn">
+        Find You'r Music <i class="fa fa-filter"></i>
+    </a>
+</div>
+
 
 <div class="container">
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-12 col-md-9">
             <dl class="tabs" data-tab="">
                 <dd class="tab tab-c-con active"><a class="tab-c" href="#panel2-1">Trending Now</a></dd>
@@ -18,7 +34,7 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php if(count($trending) > 23): ?>
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="<?php echo e(route('S.ShowMore')); ?>?type=music&q=trending">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>
@@ -35,7 +51,7 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php if(count($featured) > 23): ?>
                 <div class="col-6 col-md-2 photo-cart music-cart-wrapper scale-play-list view-event">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="<?php echo e(route('S.ShowMore')); ?>?type=music&q=featured">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>
@@ -59,7 +75,7 @@
                 <?php echo $__env->renderComponent(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <div class="music-cart-h view-event ">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="<?php echo e(route('S.ShowMore')); ?>?type=music&q=this_month">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>
@@ -74,7 +90,7 @@
                 <?php endif; ?>
 
                 <div class="music-cart-h view-event ">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="<?php echo e(route('S.ShowMore')); ?>?type=music&q=this_week">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>
@@ -88,7 +104,7 @@
                 <?php endif; ?>
 
                 <div class="music-cart-h view-event ">
-                    <a class="text-center" href="#">
+                    <a class="text-center" href="<?php echo e(route('S.ShowMore')); ?>?type=music&q=all_time">
                         <span class="view-event-sp music-cart-wrapper">View More</span>
                     </a>
                 </div>

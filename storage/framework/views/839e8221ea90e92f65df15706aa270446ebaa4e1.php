@@ -37,7 +37,7 @@
 
                     </td>
                     <td>
-                        <img src="<?php echo e(asset($playlist->image[1])); ?>" alt="" width="100px">
+                        <img src="<?php echo e(asset($playlist->image)); ?>" alt="" width="100px">
                     </td>
                     <td class="text-center"> 
                         <a href="<?php echo e(route('Panel.EditPlayList',$playlist)); ?>" class="btn btn-sm btn-info">Edit</a>
@@ -45,9 +45,9 @@
                             class="btn btn-sm btn-danger   m-2">
                             <i class="fa fa-trash"></i>
                         </a>
-                         <a href="#"  title="حذف "
+                         <a href="#"  title=" "
                          onclick="changeFeaturedPlaylist(event,'<?php echo e($playlist->id); ?>','<?php echo e(route('Panel.ChangeFeatured')); ?>')"
-                            class="btn btn-sm btn-danger   m-2">
+                            class="btn btn-sm <?php echo e($playlist->featured == 1 ? 'btn-success ' : 'btn-danger '); ?>   m-2">
                            Featured
                         </a>
                     </td>

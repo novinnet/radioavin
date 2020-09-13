@@ -41,6 +41,10 @@
                     </td>
                     <td>
                         <a href="<?php echo e(route('Panel.EditArtist',$artist)); ?>" class="btn btn-sm btn-info">Edit</a>
+                        <a href="#" data-id="<?php echo e($artist->id); ?>" title="حذف " data-toggle="modal" data-target="#deleteArtist"
+                            class="btn btn-sm btn-danger   m-2">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </td>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
@@ -55,9 +59,11 @@
 
 <?php $__env->startSection('js'); ?>
 <script>
-   
-     $('.deleteposts').click(function(e){
-          
+  $('#deleteArtist').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('id')
+            $('#artist_id').val(recipient)
+
     })
 </script>
 

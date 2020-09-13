@@ -27,14 +27,10 @@ class PlaylistController extends Controller
 
     public function Save(Request $request)
     {
-
-
-
         $slug = Str::slug($request->name);
-
         if (request()->hasFile('poster')) {
-            $poster = $this->SavePoster($request->file('poster'), $slug, $this->destinationPath);
-            $resize = $this->image_resize(179, 179, $poster, $this->destinationPath);
+            $poster = $this->SavePoster($request->file('poster'), $slug, "$this->destinationPath/$slug");
+            $resize = $this->image_resize(179, 179, $poster, "$this->destinationPath/$slug");
             File::delete(public_path() . '/' . $poster);
         } else {
             $resize = '';
@@ -57,41 +53,39 @@ class PlaylistController extends Controller
 
         return Redirect::route('Panel.PlayList');
     }
-    public function Edit(PlayList $playlist)
+    public function Edit($id)
     {
-
+        $playlist = PlayList::find($id);
         return view('Panel.PlayList.Add', compact(['playlist']));
     }
 
-    public function EditSave(Request $request, PlayList $playlist)
+    public function EditSave(Request $request, $id)
     {
-
+       
+        $playlist = PlayList::find($id);
         $slug = Str::slug($request->name);
 
         if ($request->hasFile('poster')) {
-            File::delete(public_path() . $playlist->poster);
+            File::delete(public_path() . $playlist->image);
 
-            if (!File::exists($this->destinationPath)) {
-                File::makeDirectory($this->destinationPath, 0777, true);
+            if (!File::exists("$this->destinationPath/$slug")) {
+                File::makeDirectory("$this->destinationPath/$slug", 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = $slug  . '-'  . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move($destinationPath, $fileName);
-            $Poster = "$destinationPath/$fileName";
+            $poster = $this->SavePoster($request->file('poster'), $slug, "$this->destinationPath/$slug");
+            $resize = $this->image_resize(179, 179, $poster, "$this->destinationPath/$slug");
+            File::delete(public_path() . '/' . $poster);
         } else {
-            $Poster = $playlist->poster;
+            $resize = $playlist->image;
         }
 
-        $playlist->fullname = $request->name;
-        $playlist->role = $request->role;
-        $playlist->bio = $request->bio;
-        $playlist->birthday = Carbon::parse($request->birthday);
-        $playlist->photo = $Poster;
+        $playlist->name = $request->name;
+        $playlist->information = $request->information;
+        $playlist->image = $resize;
         $playlist->update();
 
-        toastr()->success('هنرمند با موفقیت ویرایش شد');
+        toastr()->success('پلی لیست با موفقیت ویرایش شد');
 
-        return Redirect::route('Panel.ArtistList');
+        return Redirect::route('Panel.PlayList');
     }
 
     public function Delete(Request $request)
@@ -99,7 +93,8 @@ class PlaylistController extends Controller
 
 
         $playlist = PlayList::find($request->id);
-        File::deleteDirectory(public_path("$playlist->image/"));
+        $slug = Str::slug($playlist->name);
+        File::deleteDirectory(public_path("$this->destinationPath/$slug"));
 
         $playlist->tracks()->detach();
 
@@ -113,7 +108,7 @@ class PlaylistController extends Controller
     {
 
 
-        $playlist = PlayList::find($request->playlist_id);
+        $playlist = PlayList::find($request->id);
         if ($playlist->featured == 1) {
             $playlist->featured = 0;
         } else {

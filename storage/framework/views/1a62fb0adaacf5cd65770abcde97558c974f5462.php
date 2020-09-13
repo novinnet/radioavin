@@ -16,8 +16,6 @@
                         <?php else: ?>
                         Add Music
                         <?php endif; ?>
-
-
                     </h5>
                     <button type="submit" class="btn btn-primary">
                         <?php if(isset($post)): ?>
@@ -58,16 +56,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <a class="btn btn-outline-primary" href="<?php echo e(route('Panel.MusicList')); ?>">Back &nbsp;<i
-                                class="fas fa-arrow-circle-right"></i></a>
-                        <button type="submit" class="btn btn-primary"> <?php if(isset($post)): ?>
-                            Edit
-                            <?php else: ?>
-                            Save
-                            <?php endif; ?>
-
-                        </button>
+                    <div class="col-md-12 my-2 btn--wrapper text-center">
+                        <input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />
+                    </div>
+                </div>
+                <hr>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                        style="width: 0%">
+                        0%
                     </div>
                 </div>
             </form>
@@ -80,8 +77,21 @@
     <link rel="stylesheet" href="<?php echo e(asset('assets/vendors/datepicker/bootstrap-datepicker.min.css')); ?>">
     <?php $__env->stopSection(); ?>
     <?php $__env->startSection('js'); ?>
-    <script src="<?php echo e(asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')); ?>"></script>
-  
 
+    <script src="<?php echo e(asset('assets/vendors/datepicker/bootstrap-datepicker.min.js')); ?>"></script>
+
+    <script>
+        //  $.validator.addMethod('filesize', function (value, element, param) {
+        // return this.optional(element) || (element.files[0].size <= param)
+        //  }, 'سایز تصویر نمی تواند بیشتر از دو مگابایت باشد');
+        // $.validator.addMethod(
+        // "regex",
+        // function(value, element, regexp) {
+        //     return this.optional(element) || regexp.test(value);
+        // },
+        // "Please check your input."
+        // );
+    
+    </script>
     <?php $__env->stopSection(); ?>
 <?php echo $__env->make('Layout.Panel', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\radio\resources\views/Panel/Music/add.blade.php ENDPATH**/ ?>

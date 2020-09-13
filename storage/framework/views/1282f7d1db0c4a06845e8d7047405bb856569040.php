@@ -1,7 +1,8 @@
 <?php $__env->startSection('title',$title); ?>
 
 <?php $__env->startSection('main'); ?>
-<?php if(count($featured)): ?>
+<div class="playlist-container">
+    <?php if(count($featured)): ?>
 <div class="container mt-page ">
 
     <div class="row  justify-content-between">
@@ -71,6 +72,7 @@
     </div>
 </div>
 <?php endif; ?>
+</div>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('Layout.Front', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\radio\resources\views/Front/playlists.blade.php ENDPATH**/ ?>

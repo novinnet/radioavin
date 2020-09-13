@@ -58,13 +58,19 @@
         <a href="#" class="btn btn-sm btn-primary mb-3"
             onclick="addCategory(event,'<?php echo e(route('Panel.AddCatAjax')); ?>')">add</a>
         <div class="cat-wrapper  card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
+             <div class="custom-control custom-radio custom-control-inline ">
+            <input type="radio" id="category" name="category" value=""
+                    class="custom-control-input" 
+                    checked>
+                <label class="custom-control-label" for="category">No Category</label>
+             </div>
             <?php $__currentLoopData = \App\Category::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="custom-control custom-checkbox custom-control-inline ">
+            <div class="custom-control custom-radio custom-control-inline ">
                 <a href="#" class="delete-tag"
                     onclick="deleteCategory(event,'<?php echo e($item->id); ?>','<?php echo e(route('DeleteCategory')); ?>')"><i
                         class="fa fa-times"></i>
                 </a>
-                <input type="checkbox" id="category-<?php echo e($key+1); ?>" name="categories[]" value="<?php echo e($item->name); ?>"
+                <input type="radio" id="category-<?php echo e($key+1); ?>" name="category" value="<?php echo e($item->name); ?>"
                     class="custom-control-input scategory" <?php if(isset($post)): ?>
                     <?php echo e($post->categories->pluck('id')->contains($item->id) ? 'checked' : ''); ?> <?php endif; ?>>
                 <label class="custom-control-label" for="category-<?php echo e($key+1); ?>"><?php echo e($item->name); ?></label>
@@ -102,14 +108,5 @@
 </div>
 
 
-<div class="row">
-    <div class="form-group col-md-12">
-        <div class="custom-control custom-checkbox custom-control-inline ">
-            <input type="checkbox" id="featured" name="featured" value="1" class="custom-control-input " 
-            <?php if(isset($post)): ?> <?php endif; ?>>
-            <label class="custom-control-label" for="featured">Featured</label>
-        </div>
-    </div>
-</div>
 
 </div><?php /**PATH C:\xampp\htdocs\radio\resources\views/Includes/Panel/MusicSideForm.blade.php ENDPATH**/ ?>

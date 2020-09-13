@@ -5,7 +5,7 @@
             <div class="music-cart-wrapper p-2">
             <a href="{{$item->url()}}">
                     <div class="music-cart">
-                        <img src="{{asset(unserialize($item->poster)['banner'])}}" />
+                        <img src="{{$item->image('banner')}}" />
                         <div class="img-cover"></div>
                         <span class="tag">mp3</span>
                     </div>

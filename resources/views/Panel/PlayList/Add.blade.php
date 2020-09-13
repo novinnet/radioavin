@@ -21,7 +21,7 @@
                             <div class="form-group col-md-6">
                                 <label for=""><span class="text-danger">*</span> Name : </label>
                                 <input required type="text" class="form-control" name="name" id="name"
-                                    value="{{$playlist->namae ?? ''}}" placeholder="" required>
+                                    value="{{$playlist->name ?? ''}}" placeholder="" required>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -32,7 +32,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <img alt="" id="preview" width="100%" style="max-height: 400px" src="@isset($playlist)
-                                             {{asset($playlist->photo)}} 
+                                             {{asset($playlist->image)}} 
                                                 @else
                                                  {{asset('assets/images/640x360.png')}} 
                                             @endisset">
@@ -53,9 +53,9 @@
                             <div class="form-group col-md-12">
                                 <label for=""><span class="text-danger">*</span> Add Songs: </label>
                                 <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
-                                    @foreach ($songs as $song)
+                                    @foreach (\App\Post::where('type','music')->get() as $song)
                                     <option value="{{$song->id}}"
-                                        {{isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
+                                        {{isset($playlist) && $playlist->tracks()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
                                         {{$song->title}}</option>
                                     @endforeach
                                 </select>

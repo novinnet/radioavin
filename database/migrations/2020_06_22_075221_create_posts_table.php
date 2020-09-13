@@ -25,7 +25,6 @@ class CreatePostsTable extends Migration
             $table->string('released')->nullable();
             $table->string('comment_status')->nullable();
             $table->unsignedBigInteger('views')->default(0);
-            $table->boolean('featured')->default(0);
             $table->timestamps();
         });
     }

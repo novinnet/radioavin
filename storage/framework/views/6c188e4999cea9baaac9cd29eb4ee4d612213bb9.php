@@ -1,10 +1,10 @@
-<?php if(isset($post)): ?>
+<?php if(isset($post) && count($post->files)): ?>
 <?php if($post->type == 'video'): ?>
 <div class="position-relative file-wrapper">
     <a href="#" onclick="deleteFile(event,'<?php echo e($post->files->first()->id); ?>','<?php echo e(route('Ajax.DeleteFile')); ?>')"
         class="d-block mr-2 mb-3 delete-file"><i class="fa fa-times"></i> </a>
     <video width="320" height="240" controls>
-        <source src="<?php echo e(asset($post->files->first()->url)); ?>" type="video/mp4">
+        <source src="<?php echo e($post->file_url()); ?>" type="video/mp4">
     </video>
 </div>
 <?php else: ?>
@@ -13,7 +13,7 @@
         class="d-block mr-2 mb-3 delete-file"><i class="fa fa-times"></i> </a>
     <audio controls>
         <source src="horse.ogg" type="audio/ogg">
-        <source src="<?php echo e(asset($post->files->first()->url)); ?>" type="audio/mpeg">
+        <source src="<?php echo e($post->file_url()); ?>" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 </div>

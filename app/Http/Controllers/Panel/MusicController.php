@@ -5,21 +5,21 @@ namespace App\Http\Controllers\Panel;
 use App\Post;
 
 use App\Album;
-use App\Artist;
 use App\Image;
+use App\Artist;
 
 use App\Category;
 use App\PlayList;
 use Carbon\Carbon;
 use App\File as Fil;
+use Image as ImageResize;
 use Illuminate\Support\Str;
-use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
-use Image as ImageResize;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class MusicController extends Controller
 {
@@ -44,9 +44,10 @@ class MusicController extends Controller
 
     public function Save(Request $request)
     {
-        // dd($request->all());
         
-
+        
+        $this->validation_requests($request);
+        
         $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
 
         $destinationPath = "music/$slug";
@@ -59,30 +60,35 @@ class MusicController extends Controller
         } else {
             $post->type = 'music';
         }
-         if ($request->featured && $request->featured == 1) {
-            $post->featured =1;
-        } else {
-            $post->featured = 0;
-        }
+        
         $post->description = $request->translation;
         $Poster = $this->SavePoster($request->file('poster'),'poster-', $destinationPath);
-        $poster161 =  $this->image_resize(161,161,$Poster,$destinationPath);
-        $banner =    $this->image_resize(440,212,$Poster,$destinationPath);
+        $poster161 =  $this->image_resize(400,300,$Poster,$destinationPath);
+        $banner =    $this->image_resize(620,300,$Poster,$destinationPath);
         File::delete(public_path() . '/' . $Poster);
-        $post->released = Carbon::parse($request->released)->toDateTimeString();
-
+        
+        
         $post->poster = serialize(['resize' => $poster161, 'banner' => $banner]);
-       
+        
+        if($request->released) {
+            $post->released = Carbon::parse($request->released)->toDateTimeString();
+        }
         $post->duration = $this->get_duration($request->file('file'));
         if ($post->save()) {
-
-            $this->saveInformation($request, $post, $destinationPath);
+            $session = session()->put('temp',$_FILES['file']['tmp_name']);
+           
+            $this->saveInformation($request, $post, "audio");
         } else {
             return back();
         }
 
-        toastr()->success('موزیک با موفقیت ثبت شد');
-        return Redirect::route('Panel.MusicList', ['id' => $post->id]);
+      
+            return response()->json(
+                ['success' => true ]
+                , 200
+            );
+        
+        // return Redirect::route('Panel.MusicList', ['id' => $post->id]);
     }
 
     public function Edit(Post $post)
@@ -105,43 +111,45 @@ class MusicController extends Controller
 
         //  dd($request->all());
 
-        $slug = Str::slug($post->name);
+       $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
 
         $destinationPath = "music/$slug";
         if ($request->hasFile('poster')) {
-            File::delete(public_path() . $post->poster);
-
+            File::deleteDirectory(public_path("music/$post->slug"));
             if (!File::exists($destinationPath)) {
                 File::makeDirectory($destinationPath, 0777, true);
             }
-            $picextension = $request->file('poster')->getClientOriginalExtension();
-            $fileName = 'poster_' . date("Y-m-d") . '_' . time() . '.' . $picextension;
-            $request->file('poster')->move($destinationPath, $fileName);
-            $Poster = "$destinationPath/$fileName";
+             $Poster = $this->SavePoster($request->file('poster'),'poster-', $destinationPath);
+            $poster161 =  $this->image_resize(400,300,$Poster,$destinationPath);
+            $banner =    $this->image_resize(620,300,$Poster,$destinationPath);
+            File::delete(public_path() . '/' . $Poster);
+           $serialized = serialize(['resize' => $poster161, 'banner' => $banner]);
         } else {
-            $Poster = $post->poster;
+            $serialized = $post->poster;
         }
 
         $post->post_author = 1;
         $post->title = $request->title;
         $post->description = $request->translation;
         $post->released = Carbon::parse($request->released)->toDateTimeString();
-        $post->poster = $Poster;
+        $post->poster = $serialized;
        
-         if ($request->featured && $request->featured == 1) {
-            $post->featured =1;
-        } else {
-            $post->featured = 0;
-        }
+       
         $post->update();
 
 
+         if(isset($request->file)) {
+             $session = session()->put('temp',$_FILES['file']['tmp_name']);
+         }
+        $this->editInformation($request, $post,"audio");
 
-        $this->editInformation($request, $post);
+        return response()->json(
+                ['success' => true ]
+                , 200
+            );
+        // toastr()->success('موزیک با موفقیت ویرایش شد');
 
-        toastr()->success('موزیک با موفقیت ویرایش شد');
-
-        return Redirect::route('Panel.MusicList');
+        // return Redirect::route('Panel.MusicList');
     }
 
     public function DeletePost(Request $request)
@@ -154,7 +162,12 @@ class MusicController extends Controller
             File::deleteDirectory(public_path("videos/$post->slug/"));
         }else{
             File::deleteDirectory(public_path("music/$post->slug/"));
+            
         }
+        foreach ($post->files as $key => $file) {
+           $this->delete_with_ftp($file->url);
+        }
+
         $post->files()->delete();
         $post->captions()->delete();
       

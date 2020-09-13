@@ -6,13 +6,15 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-9 pb-3 justify-content-center text-center">
+            @if (count($post->files))
             <video id="my-video" class="video-js vjs-default-skin" controls data-setup='{}'>
                 @foreach ($post->files as $file)
-                <source src="{{asset($file->url)}}" type='video/mp4' label='{{$file->quality_id}}'
+            <source src="https://dl.radioavin.com/{{$file->url}}" type='video/mp4' label='{{$file->quality_id}}'
                     res='{{$file->quality_id}}' />
                 @endforeach
             </video>
             <div class="playpause">play</div>
+            @endif
         </div>
         <div class="col-12 col-md-3 music-cart-h-wrapper pl-md-0">
             <dl class="tabs" data-tab="">
@@ -21,19 +23,9 @@
             </dl>
             <div class="panel1 play-list" id="related_posts">
                 @foreach ($related_posts as $item)
-                <div class="music-cart-h" data-tr="1">
-                    <a href="{{$item->url()}}">
-                        <div class="music-cart">
-                            <img src="{{asset($item->poster[1])}}" />
-                            <div class="img-cover"></div>
-                        </div>
-                        <div class="songInfo center">
-                            <span class="artist">{{$item->singers()}}</span>
-                            <span class="song">{{$item->title}}</span>
-                            {{-- <span class="tag plus"> + </span> --}}
-                        </div>
-                    </a>
-                </div>
+               @component('components.list-view',['item'=>$item])
+                   
+               @endcomponent
                 @endforeach
             </div>
             <div class="panel1" id="this_week" style="display: none">

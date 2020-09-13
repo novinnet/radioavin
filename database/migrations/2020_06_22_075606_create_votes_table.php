@@ -18,7 +18,7 @@ class CreateVotesTable extends Migration
             $table->boolean('status');
             $table->unsignedBigInteger('votable_id');
             $table->string('votable_type');
-            $table->unsignedBigInteger('user_id');
+            $table->string('ip');
             $table->timestamps();
         });
     }

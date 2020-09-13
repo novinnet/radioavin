@@ -1,7 +1,7 @@
 <div class="music-cart-h ">
-    <a href="./single-music.html">
+    <a href="{{$item->url()}}">
         <div class="music-cart">
-            <img src="{{asset(unserialize($item->poster)['resize'])}}" />
+            <img src="{{$item->image('resize')}}" />
 
             <div class="img-cover"></div>
 

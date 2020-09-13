@@ -2,7 +2,8 @@
 <?php $__env->startSection('main'); ?>
 <?php echo $__env->make('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'photo'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-<?php $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+<div class="galleries-container">
+    <?php $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 <?php if(count($gallery->images)): ?>
 
 <div class="container border-photo-top  justify-content-center text-center">
@@ -26,7 +27,7 @@
                 <div class="col-3 photo-cart music-cart-wrapper scale-play-list view-event"><a
                         href="<?php echo e($gallery->url()); ?>"><span class="view-event-sp">View Event</span></a></div>
                 <?php else: ?>
-                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="#"><img
+                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="<?php echo e($gallery->url()); ?>"><img
                             class="photo-cart-img" src="<?php echo e(asset(unserialize($item->url)['resize'])); ?>"></a></div>
                 <?php endif; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -40,7 +41,7 @@
                 <div class="col-3 photo-cart music-cart-wrapper scale-play-list view-event"><a
                         href="<?php echo e($gallery->url()); ?>"><span class="view-event-sp">View Event</span></a></div>
                 <?php else: ?>
-                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="#"><img
+                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="<?php echo e($gallery->url()); ?>"><img
                             class="photo-cart-img" src="<?php echo e(asset(unserialize($item->url)['resize'])); ?>"></a></div>
                 <?php endif; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -54,6 +55,7 @@
 <?php endif; ?>
 
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+</div>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('Layout.Front', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\radio\resources\views/Front/photogalleries.blade.php ENDPATH**/ ?>

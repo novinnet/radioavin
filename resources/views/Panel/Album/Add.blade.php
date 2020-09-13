@@ -53,7 +53,7 @@
                             <div class="form-group col-md-12">
                                 <label for=""><span class="text-danger">*</span> Add Songs: </label>
                                 <select name="songs[]" class="js-example-basic-single" multiple dir="rtl">
-                                    @foreach ($songs as $song)
+                                     @foreach (\App\Post::where('type','music')->get() as $song)
                                     <option value="{{$song->id}}"
                                         {{isset($album) && $album->songs()->pluck('id')->contains($song->id) ? 'selected' : ''}}>
                                         {{$song->title}}</option>

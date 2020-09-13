@@ -3,7 +3,8 @@
 @section('main')
 @include('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'photo'])
 
-@foreach ($galleries as $gallery)
+<div class="galleries-container">
+    @foreach ($galleries as $gallery)
 @if (count($gallery->images))
 
 <div class="container border-photo-top  justify-content-center text-center">
@@ -26,7 +27,7 @@
                 <div class="col-3 photo-cart music-cart-wrapper scale-play-list view-event"><a
                         href="{{$gallery->url()}}"><span class="view-event-sp">View Event</span></a></div>
                 @else
-                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="#"><img
+                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="{{$gallery->url()}}"><img
                             class="photo-cart-img" src="{{asset(unserialize($item->url)['resize'])}}"></a></div>
                 @endif
                 @endforeach
@@ -40,7 +41,7 @@
                 <div class="col-3 photo-cart music-cart-wrapper scale-play-list view-event"><a
                         href="{{$gallery->url()}}"><span class="view-event-sp">View Event</span></a></div>
                 @else
-                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="#"><img
+                <div class="col-3 photo-cart music-cart-wrapper scale-play-list "><a href="{{$gallery->url()}}"><img
                             class="photo-cart-img" src="{{asset(unserialize($item->url)['resize'])}}"></a></div>
                 @endif
                 @endforeach
@@ -54,5 +55,6 @@
 @endif
 
 @endforeach
+</div>
 
 @endsection

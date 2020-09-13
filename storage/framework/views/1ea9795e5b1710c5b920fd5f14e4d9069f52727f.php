@@ -96,10 +96,10 @@
 <div class="col-md-12 row my-3">
     <label for="" class="col-md-2">زیرنویس</label>
     <div class="col-md-3 ">
-        <input type="text" class="form-control" name="captions[][1]">
+        <input type="text" class="form-control" name="captions[1][1]">
     </div>
     <div class="col-md-3">
-        <input type="file" name="captions[][2]" id="" class="form-control" />
+        <input type="file" name="captions[1][2]" id="" class="form-control" />
     </div>
 </div>
 <a href="#" onclick="addCaption(event)" class="d-block mr-2 mb-3">افزودن زیرنویس </a>
