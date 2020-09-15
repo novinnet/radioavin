@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Panel;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\sendMail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
     function list()
     {
+        
+        Mail::to('yasfuny@gmail.com')->send(new sendMail('sfsf'));
 
         $users = User::all();
         return view('Panel.Users.Lists', compact('users'));
@@ -28,6 +32,8 @@ class UserController extends Controller
     
     public function Add(Request $request)
     {
+        
+
         $user = User::create([
             'mobile' => $request->mobile,
             'email' => $request->email,
@@ -38,7 +44,7 @@ class UserController extends Controller
 
         // send sms
 
-        toastr()->success('کاربر با موفقیت اضافه شد');
+        toastr()->success('User Added Successfully');
         return back();
 
     }

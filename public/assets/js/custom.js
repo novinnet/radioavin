@@ -94,6 +94,25 @@
             },
         },
     });
+      $("#add-member").validate({
+        rules: {
+            email:{
+                required:true,
+                email:true
+            },
+
+            password: {
+                required: true,
+                minlength: 8,
+               
+            },
+            mobile: {
+                
+                regex: /^09[0-9]{9}$/,
+            },
+        }
+      
+    });
     $("#add-plan").validate({
         rules: {
             name: {

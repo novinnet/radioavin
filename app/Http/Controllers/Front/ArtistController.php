@@ -18,4 +18,22 @@ class ArtistController extends Controller
       
         return view('Front.show-artist',$data);
     }
+
+    public function Filter()
+    {
+        if (!isset(request()->q)) {
+            abort(404);
+        }
+        $q = request()->q;
+       
+        
+        $data['singers'] = Artist::whereRole('singer')->where('fullname', 'like', $q . '%')->get();
+        $data['q'] = $q;
+
+        return view('Front.show-filter',$data);
+
+
+
+
+    }
 }

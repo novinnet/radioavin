@@ -134,6 +134,7 @@ Route::group([], function () {
     Route::get('album/{slug}', 'Front\AlbumController@Play')->name('Play.Album');
     Route::get('artist/{slug}', 'Front\ArtistController@Show')->name('Artist.Show');
 
+    Route::get('filter', 'Front\ArtistController@Filter')->name('Filter');
 
 
     Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');

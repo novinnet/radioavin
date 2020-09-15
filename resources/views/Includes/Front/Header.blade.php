@@ -53,7 +53,7 @@
                         </li>
                         <div class="profile-content hidden">
                             <h5>WelCome </h5>
-                            <h6>sdfsfs</h6>
+                            <h6 class="pb-2">{{explode('@',auth()->user()->email)[0]}}</h6>
                             <div class="user-links">
                                 <a href="#">Profile</a>
                                 <a href="{{route('logout-user')}}">Logout</a>

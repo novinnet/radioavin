@@ -8,6 +8,17 @@ $(document).ready(function () {
         $(this).removeClass("ac_over");
     });
 
+    $('.profile-icon').click(function(e){
+        if($('.profile-content').hasClass('hidden')){
+
+            $('.profile-content').removeClass('hidden')
+            $('.profile-content').addClass('show')
+        }else{
+            $('.profile-content').addClass('hidden')
+            $('.profile-content').removeClass('show')
+        }
+    })
+
     $('.mobile-menu').click(function (e) {
         e.preventDefault()
         if ($('.mobile-menu-content').hasClass('hidden')) {
@@ -239,4 +250,9 @@ function openFilter() {
 }
 function closeNav() {
     document.getElementById("myNav").style.height = "0%";
+}
+
+
+function showForm(event) {
+    
 }

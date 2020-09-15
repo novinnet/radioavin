@@ -19,33 +19,24 @@
                 <div class="modal-body">
                     <div class="row">
                         
+                       
+                      <div class="form-group col-md-6">
+                         <label for=""> Email: <span class="text-danger">*</span> </label>
+                         <input type="text" class="form-control" name="email" id="email" value=""
+                             >
+                     </div>
                         <div class="form-group col-md-6">
-                          <label for=""><span class="text-danger">*</span>  نام </label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" value=""
-                                placeholder="نام ">
-                        </div>
-                         <div class="form-group col-md-6">
-                           <label for=""> <span class="text-danger">*</span>  نام خانوادگی</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name" value=""
-                                placeholder="نام خانوادگی">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for=""> <span class="text-danger">*</span>  شماره موبایل</label>
+                            <label for="">  Mobile: </label>
                             <input type="text" class="form-control" name="mobile" id="mobile" value=""
                                 >
                         </div>
                          <div class="form-group col-md-6">
-                            <label for="">آدرس ایمیل</label>
-                            <input type="text" class="form-control" name="email" id="email" value=""
-                                >
-                        </div>
-                         <div class="form-group col-md-6">
-                            <label for=""> <span class="text-danger">*</span>  رمز عبور</label>
+                            <label for=""> <span class="text-danger">*</span>  Password</label>
                             <input type="text" class="form-control" name="password" id="password" value=""
                                 >
                         </div>
                          <div class="form-group col-md-6">
-                            <label for=""> <span class="text-danger">*</span>  تایید رمز عبور</label>
+                            <label for=""> <span class="text-danger">*</span>  Confirm Password</label>
                             <input type="text" class="form-control" name="cpassword" id="cpassword" value=""
                                 >
                         </div>
@@ -54,7 +45,7 @@
                                     <input type="checkbox" id="sendsms" name="sendsms" value="1"
                                         class="custom-control-input" >
                                     <label class="custom-control-label" for="sendsms">
-                                        ارسال پیامک آگاه ساز به کاربر</label>
+                                        Send Message To User</label>
                                 </div>
 
                             </div>
@@ -62,7 +53,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class=" btn btn-success text-white">ثبت</button>
+                    <button type="submit" class=" btn btn-success text-white">Send</button>
                 </div>
             </div>
         </form>
@@ -196,48 +187,5 @@
 @endsection
 
 @section('js')
-<script>
-    $('table input[type="checkbox"]').change(function(){
-            if( $(this).is(':checked')){
-            $(this).parents('tr').css('background-color','#41f5e07d');
-            }else{
-                $(this).parents('tr').css('background-color','');
-            }
-            array=[]
-            $('table input[type="checkbox"]').each(function(){
-                if($(this).is(':checked')){
-                array.push($(this).attr('data-id'))
-               }
-               if(array.length !== 0){
-                $('.delete-edit').show()
-                if (array.length !== 1) {
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').hide()
-                }else{
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').show()
-                }
-            }
-            else{
-                $('.container_icon').removeClass('justify-content-between')
-                $('.container_icon').addClass('justify-content-end')
-                $('.delete-edit').hide()
-            }
-        })
-            
-    })
-    
-     $('.deleteposts').click(function(e){
-            e.preventDefault()
-            data = { array:array, _method: 'delete',_token: "{{ csrf_token() }}" };
-            url='{{route('Panel.DeleteUser')}}';
-            request = $.post(url, data);
-            request.done(function(res){
-            location.reload()
-        });
-    })
-</script>
 
 @endsection

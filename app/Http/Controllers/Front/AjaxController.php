@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Artist;
 use App\Plan;
 use App\Post;
+use App\Vote;
+use App\Artist;
+use UplaylistTrack;
+use App\UserPlaylist;
 use App\Mail\Discount;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Discount as AppDiscount;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\UserPlaylist;
-use App\Vote;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
-use UplaylistTrack;
 
 class AjaxController extends Controller
 {
@@ -79,6 +80,7 @@ class AjaxController extends Controller
     public function getPlaylists(Request $request)
     {
 
+       
 
 
         if (!auth()->check()) {
@@ -235,21 +237,25 @@ class AjaxController extends Controller
 
     public function LikePost()
     {
-        $id = request()->post_id;
-        $post = Post::whereId($id)->first();
+        if (Auth::check()) {
+            $id = request()->post_id;
+            $post = Post::whereId($id)->first();
+           
+            if (count($post->votes->where('user_id', Auth::user()->id)) == 0) {
 
-        if (count($post->votes->where('ip', request()->ip())) == 0) {
+                Vote::create([
+                    'votable_id' => request()->post_id,
+                    'votable_type' => 'App\Post',
+                    'user_id' => auth()->user()->id,
+                    'status' => 1
+                ]);
 
-            Vote::create([
-                'votable_id' => request()->post_id,
-                'votable_type' => 'App\Post',
-                'ip' => request()->ip(),
-                'status' => 1
-            ]);
-
-            return response()->json(['likes' => count($post->votes), 'status' => true], 200);
+                return response()->json(['error'=>false,'likes' => count($post->votes), 'status' => true], 200);
+            } else {
+                return response()->json(['error'=>false,'likes' => count($post->votes), 'status' => false], 200);
+            }
         } else {
-            return response()->json(['likes' => count($post->votes), 'status' => false], 200);
+            return response()->json(['error' => true,'status'=>false], 200);
         }
     }
 

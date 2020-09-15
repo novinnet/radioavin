@@ -59,17 +59,19 @@
             onclick="addCategory(event,'<?php echo e(route('Panel.AddCatAjax')); ?>')">add</a>
         <div class="cat-wrapper  card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
              <div class="custom-control custom-radio custom-control-inline ">
-            <input type="radio" id="category" name="category" value=""
+            <input type="radio" id="catego" name="category" value=""
                     class="custom-control-input" 
                     checked>
-                <label class="custom-control-label" for="category">No Category</label>
+                <label class="custom-control-label" for="catego">No Category</label>
              </div>
             <?php $__currentLoopData = \App\Category::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="custom-control custom-radio custom-control-inline ">
+               <?php if($item->id !== 2 && $item->id !== 3): ?> 
                 <a href="#" class="delete-tag"
                     onclick="deleteCategory(event,'<?php echo e($item->id); ?>','<?php echo e(route('DeleteCategory')); ?>')"><i
                         class="fa fa-times"></i>
                 </a>
+               <?php endif; ?>
                 <input type="radio" id="category-<?php echo e($key+1); ?>" name="category" value="<?php echo e($item->name); ?>"
                     class="custom-control-input scategory" <?php if(isset($post)): ?>
                     <?php echo e($post->categories->pluck('id')->contains($item->id) ? 'checked' : ''); ?> <?php endif; ?>>

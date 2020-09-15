@@ -11,7 +11,7 @@
                     </div>
                     <div class="rightPanel">
                         <div class="titleContainer" style="margin-bottom: 20px">
-                            <h2 class="title dark">Register To RadioAvin</h2>
+                            <h3 class="title dark">Register To RadioAvin</h3>
                             @if (count($errors))
                             <h6 class="text-danger">
                                 {{ $errors->first() }}

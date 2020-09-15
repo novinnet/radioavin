@@ -1,6 +1,11 @@
 /node_modules
 /public/hot
 /public/storage
+/public/artist_image
+/public/music
+/public/playlist_images
+/public/video
+/public/videos
 /storage/*.key
 /vendor
 .env

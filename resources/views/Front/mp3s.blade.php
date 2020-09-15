@@ -2,25 +2,7 @@
 
 @section('main')
 @include('Includes.Front.TopSlider',['sliders' => $sliders,'type'=>'music'])
-
-<div id="myNav" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <div class="overlay-content">
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
-  </div>
-</div>
-
-
-<div class="col-md-12 text-center">
-    <a href="#"  onclick="openFilter()" class="filter-btn">
-        Find You'r Music <i class="fa fa-filter"></i>
-    </a>
-</div>
-
-
+@include('Includes.Front.Alfabet')
 <div class="container">
     <div class="row mb-2">
         <div class="col-12 col-md-9">

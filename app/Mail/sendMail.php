@@ -10,16 +10,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class sendMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $emailContent;
+    public $user;
     
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($emailContent)
+    public function __construct($user)
     {
-        $this->emailContent = $emailContent;
+        $this->user = $user;
        
     }
 

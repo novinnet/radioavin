@@ -29,8 +29,8 @@ class LoginController extends Controller
 
     public function Verify(Request $request)
     {
-        
-      
+
+
         if (filter_var($request->username, FILTER_VALIDATE_EMAIL)) {
             $rules = array(
                 'username'             => 'required | email',
@@ -41,8 +41,8 @@ class LoginController extends Controller
                 $messages = $validator->messages();
                 return Redirect::to('login')
                     ->withErrors($validator);
-                $member = User::where('email', $request->username)->first();
             }
+            $member = User::where('email', $request->username)->first();
         } elseif (preg_match("/^09[0-9]{9}$/", $request->username)) {
 
             $rules = array(
@@ -75,7 +75,7 @@ class LoginController extends Controller
     {
         // dd($request->all());
         $rules = array(
-            'mobile'             => 'unique:users,mobile',
+            'mobile'             => 'nullable | unique:users,mobile',
             'email'             => 'required | email | unique:users,email',
             'password'         => 'required | min:6',
 
@@ -109,7 +109,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        
+
 
         Auth::logout();
         return redirect()->route('MainUrl');

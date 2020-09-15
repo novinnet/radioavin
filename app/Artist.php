@@ -44,7 +44,7 @@ class Artist extends Model
      public function image($size)
     {
         $data = @unserialize($this->photo);
-        if ($data == true && !is_null(unserialize($this->photo)["resize"])) {
+        if ($data == true && !is_null(unserialize($this->photo)["$size"])) {
             
             $resize = unserialize($this->photo)["$size"];
             return asset($resize);

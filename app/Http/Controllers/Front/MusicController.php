@@ -40,10 +40,11 @@ class MusicController extends Controller
                 'lyric' => $item->description,
                 'likes' => count($item->votes),
                 'views' => $item->views,
-                'released' => $item->released ? $item->released : null
+                'released' => $item->released
             ];
         }
-        $data['post']->increment('views');
+        
+        
         
 
         $data['track_lists'] = json_encode($array);

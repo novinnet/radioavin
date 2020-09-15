@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Yoeunes\Toastr\ToastrServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
        

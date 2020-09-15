@@ -319,6 +319,7 @@ class Controller extends BaseController
     {
         $getID3 = new \getID3;
         $fil = $getID3->analyze($file);
+      
         return date('i:s', $fil['playtime_seconds']);
     }
 

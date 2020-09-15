@@ -20,8 +20,10 @@
                     </div>
                 </div>
                 <div class="like text-center">
-                <a class="like-post" data-id="<?php echo e($post->id); ?>" onclick="likePost(event , '<?php echo e(route('Ajax.LikePost')); ?>')">
-                       &#10084;
+                    <a class="like-post" data-id="<?php echo e($post->id); ?>"
+                        onclick="likePost(event , '<?php echo e(route('Ajax.LikePost')); ?>')">
+                        &#10084;
+                        &nbsp;&nbsp;
                         <?php echo e(count($post->votes)); ?> Like
                     </a>
                 </div>
@@ -46,7 +48,7 @@
                         <div class="next-track" onclick="nextTrack()">
                             <i class="fas fa-angle-double-right"></i>
                         </div>
-                    <a href="<?php echo e(route('DownLoad',$post->id)); ?>" class="download-btn"  >
+                        <a href="<?php echo e(route('DownLoad',$post->id)); ?>" class="download-btn">
                             <i class="fas fa-download"></i>
                         </a>
                     </div>
@@ -69,14 +71,14 @@
                             <div class="mp3Description">
                                 <div class="views">Plays: <?php echo e($post->views ?? ''); ?></div>
                                 <div pubdate="pubdate" class="dateAdded">
-                                <?php if($post->released): ?>
+                                    <?php if($post->released): ?>
                                     Released: <?php echo e($post->released); ?>
 
-                                <?php endif; ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
-                            
+
                         </div>
                     </div>
                 </div>
@@ -113,8 +115,8 @@
             </div>
             <div class="panel1" id="this_week" style="display: none">
                 <span class="lyrics-span">
-            
-                
+
+
 
                 </span>
             </div>
@@ -127,9 +129,11 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
-<script src="<?php echo e(asset('frontend/assets/Generic-Mobile-friendly-Slider-Plugin-with-jQuery-touchSlider/jquery.touchSlider.js')); ?>"></script>
+<script
+    src="<?php echo e(asset('frontend/assets/Generic-Mobile-friendly-Slider-Plugin-with-jQuery-touchSlider/jquery.touchSlider.js')); ?>">
+</script>
 
-    <script>
+<script>
     var prevScrollpos = window.pageYOffset;
     window.onscroll = function () {
         var currentScrollPos = window.pageYOffset;
@@ -250,7 +254,7 @@
 
         // Update details of the track
         track_art.style.backgroundImage =
-            "url(" + track_list[track_index].image + ")";
+            "url("+ track_list[track_index].image + ")";
         track_name.textContent = track_list[track_index].name;
         track_artist.textContent = track_list[track_index].artist;
         now_playing.textContent = "PLAYING " + (track_index + 1) + " OF " + track_list.length;
@@ -282,10 +286,21 @@ function likePost(event,url) {
             _token: token
         });
         request.done(function(res) {
+            
+            if(res.error) {
+                 var jbox =  new jBox('Modal', {
+                    attach: '.openModal',
+                    minWidth:300,
+                    content: 'You must  <a href="'+mainUrl+'/login" class="text-gray">login </a> to add to playlist.'
+                 })
+                 jbox.open()
+             }
             if(res.status) {
                 $(event.target).closest(".like-post").html(` &#10084;
                              ${res.likes + 1} Like`);
              track_list[track_index].likes++;
+         }else{
+             
          }
         });
 }

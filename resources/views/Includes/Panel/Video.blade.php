@@ -29,7 +29,7 @@
     <a href="#" onclick="deleteFile(event,'{{$file->id}}','{{route('Ajax.DeleteFile')}}')"
         class="d-block mr-2 mb-3 delete-file"><i class="fa fa-times"></i> </a>
     <video width="320" height="240" controls>
-        <source src="{{asset($file->url)}}" type="video/mp4">
+        <source src="https://dl.radioavin.com/{{$file->url}}" type="video/mp4">
     </video>
 </div>
 @else

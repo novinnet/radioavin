@@ -9,3 +9,6 @@ Route::get('hot-tracks','Api\MainController@hot_tracks');
 
 Route::post('search','Api\MainController@search');
 
+Route::post('/register','Api\AuthController@register');
+Route::post('/login','Api\AuthController@login');
+Route::post('/like-post','Api\UserController@like_post');

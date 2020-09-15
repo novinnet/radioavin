@@ -28,6 +28,8 @@ class ArtistController extends Controller
     public function Save(Request $request)
     {
 
+        
+
         $slug = SlugService::createSlug(Artist::class, 'slug', $request->name);
         if (request()->hasFile('poster')) {
             $Poster = $this->SavePoster($request->file('poster'), 'poster-', "$this->destinationPath/$slug");
@@ -44,7 +46,11 @@ class ArtistController extends Controller
         $artist->fullname = $request->name;
         $artist->role = $request->role;
         $artist->bio = $request->bio;
-        $artist->birthday = Carbon::parse($request->birthday);
+       if ($request->birthday) {
+            $artist->birthday = Carbon::parse($request->birthday)->toDateTimeString();
+       }else{
+           $artist->birthday = null;
+       }
         $artist->photo = $poster;
         if(isset($request->popular) && $request->popular == 1) {
             $artist->popular= $request->popular;
@@ -64,6 +70,7 @@ class ArtistController extends Controller
     public function EditSave(Request $request, Artist $artist)
     {
 
+        
 
         
         if ($request->hasFile('poster')) {
@@ -82,7 +89,11 @@ class ArtistController extends Controller
         $artist->fullname = $request->name;
         $artist->role = $request->role;
         $artist->bio = $request->bio;
-        $artist->birthday = Carbon::parse($request->birthday);
+        if (!is_null($request->birthday)) {
+            $artist->birthday = Carbon::parse($request->birthday)->toDateTimeString();
+       }else{
+           $artist->birthday = null;
+       }
         $artist->photo = $poster;
           if(isset($request->popular) && $request->popular == 1) {
             $artist->popular= $request->popular;

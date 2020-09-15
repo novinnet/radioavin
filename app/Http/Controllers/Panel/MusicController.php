@@ -47,7 +47,7 @@ class MusicController extends Controller
         
         
         $this->validation_requests($request);
-        
+       
         $slug = SlugService::createSlug(Post::class, 'slug',$request->title);
 
         $destinationPath = "music/$slug";

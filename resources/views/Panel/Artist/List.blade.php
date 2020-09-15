@@ -35,7 +35,9 @@
 
                     <td>
                     
-                       {{\Carbon\Carbon::parse($artist->birthday)->format('d F Y')}}
+                      @if ($artist->birthday)
+                           {{\Carbon\Carbon::parse($artist->birthday)->format('d F Y')}}
+                      @endif
                     </td>
                     <td>
                         6.1 از 10

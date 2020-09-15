@@ -3,11 +3,8 @@
     <div class="music-cart-wrapper scale-play-list p-3 p-sm-2 p-md-1 p-lg-2">
     <a href="{{$video->url()}}">
             <div class="music-cart">
-                @if(isset($video->poster) && !is_null($video->poster) && unserialize($video->poster)['resize'])
-                <img src="{{asset(unserialize($video->poster)['resize'])}}" />
-                @else
-                <img src="{{asset('frontend/images/remix.jpg')}}" />
-                @endif
+                <img src="{{$video->image('resize')}}" />
+             
 
                 <div class="img-cover"></div>
             </div>

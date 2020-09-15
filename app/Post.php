@@ -145,7 +145,9 @@ class Post extends Model
     }
     public function getReleasedAttribute($value)
     {
-        return \Carbon\Carbon::parse($value)->format('Y/m/d');
+        if($value) {
+            return \Carbon\Carbon::parse($value)->format('Y/m/d');
+        }
     }
 
     public function get_type()

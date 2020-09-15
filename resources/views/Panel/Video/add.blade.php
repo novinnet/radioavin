@@ -43,8 +43,6 @@
                     @include('Includes.Panel.VideoSideForm')
                 </div>
             
-
-
               
                     <div class="col-md-12 my-2 btn--wrapper text-center">
                         <input type="submit" name="upload" id="upload" value="Upload" class="btn  btn-success" />
